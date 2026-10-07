@@ -17,27 +17,29 @@ Echo 不是通用博客主题，它是为「资源站 + 博客」混合形态设
 - `resource.enable: true` 的文章自动进入资源轨，其余进文章轨
 - 资源库支持多类型独立分页：`/resources/movie/`、`/resources/game/`、`/resources/mod/` …
 - 类型可自由增删，图标来自主题内置图标集
+- 侧栏会**按页面类型自动过滤**：文章 / 资源详情页只保留统计与目录，其余页面显示全部启用组件
 
 **三栏响应式布局**
 
 - 左栏：个人名片 / 音乐播放器 / 分类 / 标签
 - 中栏：正文，宽度自适应
 - 右栏：站点统计 / 文章目录（文章页）或 日历 / 站点信息（列表页）
-- 断点：`< 1280px` 收起右栏，目录转为正文内联；`< 1024px` 再收起左栏
-- 宽屏（≥ 1680px）布局上限放宽到 `min(92vw, 1840px)`，多出的空间摊进栏距，不留大片空边
+- 断点：`< 1280px` 收起右栏，目录转为正文内联；`< 1024px` 再收起左栏；`< 900px` 导航折叠为抽屉菜单
+- 宽屏（≥ 1680px）中栏上限放宽到 `main_width_wide`（默认 1240px），随视口在 `main_width` ~ 该值之间伸缩
 
 **阅读体验**
 
 - 侧栏 `position: sticky` 常驻，目录不会随正文上滑被导航盖住
 - 目录高亮跟随滚动，支持 1~3 级深度
-- 代码块支持 mac 三色圆点 / 纯色 / 无边框三种风格，带复制按钮与语言角标
+- 代码块自带语言角标与一键复制
 
 **其他**
 
 - 深浅色双主题：跟随系统 + 手动切换 + 刷新不闪屏（`<head>` 内联防抖脚本）
+- 浅色主题下顶部横幅自动换成明亮的浅蓝底、深色文字，不出现割裂感
 - 站内搜索：`/search.json` 索引，无第三方服务
-- 40+ 自绘 SVG 图标（24 网格，stroke 1.7），无图标字体、无 CDN 图标依赖
-- 顶部导航横幅、首页 Hero 大图、页脚备案、评论位（默认关闭）
+- 51 个自绘 SVG 图标（24 网格，stroke 1.7），无图标字体、无 CDN 图标依赖
+- 首页 Hero 大图、页脚备案、内置 giscus 评论
 
 ---
 
@@ -150,13 +152,20 @@ resource:
 
 ```yaml
 color_scheme: auto        # auto / dark / light
-accent: '#5b8cff'         # 主色，改一处全站生效
 radius: 14px              # 卡片圆角
 
-layout_width: 1440px      # 三栏总宽（≥1680px 视口会被 92vw 覆盖）
+# 配色：只填想改的项，其余由 accent 自动派生
+colors:
+  accent: '#5b8cff'       # 主色，改一处全站联动
+  # banner_light: '#dbeafe'   # 浅色主题横幅底色
+
+layout_width: 1440px      # 三栏总宽
 layout_gap: 36px          # 栏间距
 main_width: 820px         # 正文列宽
-rail_width: 240px         # 侧栏宽度
+main_width_wide: 1240px   # ≥1680px 视口下正文的封顶宽度
+rail_width: 240px         # 侧栏默认宽度
+
+favicon: /images/favicon.svg   # 标签栏图标，站点 _config.yml 的 favicon 优先
 
 hero:                     # 首页大图
   enable: true
@@ -174,8 +183,9 @@ toc:
   depth: 3
 ```
 
-> 提示：侧栏宽度以 `rail.left.width` / `rail.right.width` 为准（全局 `rail_width` 只作默认值）；
-> 代码块样式（mac 三色圆点窗口、复制按钮、语言角标）由主题内置，无需配置。
+个人名片、社交图标、网盘配色等全部可配，详见 [`_config.yml`](_config.yml)（每项都带中文注释）。
+
+> 提示：侧栏宽度以 `rail.left.width` / `rail.right.width` 为准（全局 `rail_width` 只作默认值）。
 
 ## 内容排序
 
@@ -194,28 +204,38 @@ category_order: 2 # 分类内排序：在所属分类页 / 资源类型页里优
 
 ---
 
+## 相邻文章
+
+主题自带上一篇 / 下一篇导航，**按内容轨分流**：文章只在文章轨内前后翻，
+资源帖只在资源轨内前后翻，两边互不串联。排序规则与列表页一致
+（先 `order` / `category_order`，未设置的按时间倒序）。
+
+开关在主题配置 `post.prev_next`，单篇可在 front-matter 里覆盖。
+
+---
 
 ## 目录结构
 
 ```
 themes/echo/
-├── _config.yml            主题配置
+├── _config.yml            主题配置（14 个功能区块，逐项带中文注释）
 ├── layout/
-│   ├── layout.ejs         页面骨架（含 body class 分流）
+│   ├── layout.ejs         页面骨架（含主题属性输出）
 │   ├── index.ejs          首页
-│   ├── post.ejs           文章 / 资源详情
+│   ├── post.ejs           文章 / 资源详情（两者共用，靠 resource.enable 分流）
 │   ├── page.ejs           独立页面
 │   ├── archive.ejs        归档
 │   ├── category.ejs       分类
 │   ├── tag.ejs            标签
 │   ├── article-index.ejs  文章轨列表
 │   ├── resource-index.ejs 资源轨列表
-│   ├── _partial/          头部、导航、页脚、卡片、分页、搜索、左右栏容器
+│   ├── _partial/          头部、导航、页脚、卡片、分页、搜索、上下篇、评论区
 │   └── _rail/             侧栏组件：名片/音乐/统计/分类/标签/日历/站点信息/目录
 ├── scripts/
-│   ├── helper.js          20 个 echo_* helper + 内置 SVG 图标表
+│   ├── helper.js          21 个 echo_* helper + 51 个内置 SVG 图标
 │   ├── resource.js        资源轨 generator + search.json
-│   └── articles.js        文章轨 generator
+│   ├── articles.js        文章轨 generator
+│   └── category.js        分类页 generator
 └── source/
     ├── css/echo.css       全部样式
     ├── js/echo.js         主题脚本（主题切换、目录高亮、搜索、播放器…）
@@ -228,7 +248,17 @@ themes/echo/
 
 - 字体走 Google Fonts CDN，国内环境建议自托管后替换 `head.ejs` 里的引用
 - 音乐播放器未配置音源时整卡不渲染（不会出现按钮全灰的假播放器）
-- 未内置评论服务，需要的话在 `layout/_partial/` 下加组件并在 `post.ejs` 引入
+- 评论用 giscus，需先在自己指定的公开仓库装好 giscus app 并开启 Discussions，
+  再把拿到的配置填进主题 `comments.giscus`；详细步骤见指南第六篇
+- 主题仓库里是**通用默认值**，个人图片路径与站点信息建议写在站点 `_config.yml` 里覆盖，
+  这样更新主题时不会冲突
+
+---
+
+## 使用指南
+
+站内有一套完整的六篇指南（认识主题 / 安装配置 / 布局配色 / 资源帖 /
+写作规范 / 侧栏与 FAQ），发布后位于站点的 `/categories/主题指南/`。
 
 ---
 
