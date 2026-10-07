@@ -5,8 +5,26 @@
 # --- 外观 ---
 # 默认配色：auto 跟随系统 / dark 深色 / light 浅色
 color_scheme: auto
-# 主题主色（改这一个值，全站按钮、角标、高亮一起变）
+# 主题主色（快捷写法，等价于 colors.accent）。改这一个值，
+# 按钮、角标、链接高亮、发光阴影、品牌渐变会一起变。
 accent: '#5b8cff'
+
+# --- 配色 ---
+# 只填你真正想改的项，其余全部由 accent 自动派生。
+# accent      主色：按钮、选中态、链接、角标、进度条
+# secondary   渐变辅色：留空则由 accent 自动提亮生成
+# 下面这些一般不用填，需要精确覆盖时才写（写成 CSS 合法值即可）：
+#   accent-soft        主色浅底（如选中项背景）
+#   accent-soft-strong 暗色模式下的浅底
+#   accent-strong      深色模式正文里用的主色（保证对比度）
+#   accent-text        主色文字/行内代码色
+#   accent-glow        主色发光阴影
+#   warn               警告色（默认橙）
+colors:
+  accent: '#5b8cff'
+  # secondary: '#8f6bff'
+  # accent-glow: 'rgba(91, 140, 255, .3)'
+
 # 卡片圆角
 radius: 14px
 # 三栏总宽度

@@ -173,6 +173,83 @@ function panColor(name) {
   return '';
 }
 
+/* ==========================================================
+   主题色彩：由一个主色自动派生出一整套配色变量
+   ========================================================== */
+
+/** 把 #rgb / #rrggbb / rrggbb 统一成 [r, g, b]；无法解析返回 null */
+function parseHex(color) {
+  if (!color) return null;
+  let hex = String(color).trim().replace(/^#/, '').trim();
+  if (hex.length === 3) {
+    hex = hex.split('').map(c => c + c).join('');
+  }
+  if (!/^[0-9a-fA-F]{6}$/.test(hex)) return null;
+  return [
+    parseInt(hex.slice(0, 2), 16),
+    parseInt(hex.slice(2, 4), 16),
+    parseInt(hex.slice(4, 6), 16)
+  ];
+}
+
+function toHex(rgb) {
+  return '#' + rgb.map(v => {
+    const n = Math.max(0, Math.min(255, Math.round(v)));
+    return n.toString(16).padStart(2, '0');
+  }).join('');
+}
+
+/** 调整亮度：amount > 0 变亮，< 0 变暗（-1 ~ 1） */
+function shade(rgb, amount) {
+  const target = amount >= 0 ? 255 : 0;
+  const ratio = Math.abs(amount);
+  return rgb.map(v => v + (target - v) * ratio);
+}
+
+/** 生成 rgba() 字符串 */
+function rgba(rgb, alpha) {
+  return 'rgba(' + rgb.map(v => Math.max(0, Math.min(255, Math.round(v)))).join(', ') + ', ' + alpha + ')';
+}
+
+/**
+ * 读取配色配置并生成 CSS 变量。
+ * theme.colors 下的每一项都会输出成同名 CSS 变量（kebab-case），
+ * 放在 :root 与 [data-theme='dark'] 两处，缺失的项自动由 accent 派生。
+ */
+function themeColorVars() {
+  const theme = hexo.theme.config || {};
+  const colors = theme.colors || {};
+  const accent = parseHex(colors.accent) || parseHex(theme.accent) || [91, 140, 255];
+  const secondary = parseHex(colors.secondary) || shade(accent, 0.28);
+
+  // 主色派生：柔和底色 / 深色模式底色 / 按下态 / 主色文字 / 发光阴影
+  const derived = {
+    accent: toHex(accent),
+    'accent-rgb': accent.join(', '),
+    secondary: toHex(secondary),
+    'secondary-rgb': secondary.join(', '),
+    'accent-soft': rgba(accent, 0.12),
+    'accent-soft-strong': rgba(accent, 0.16),
+    'accent-strong': toHex(shade(accent, -0.22)),
+    'accent-text': toHex(shade(accent, -0.3)),
+    'accent-glow': rgba(accent, 0.3),
+    'accent-glow-strong': rgba(accent, 0.38)
+  };
+
+  // 品牌位渐变的第二色也跟随主色
+  derived['brand-gradient'] = 'linear-gradient(135deg, ' + derived.accent + ', ' + derived.secondary + ')';
+
+  // 允许配置里直接覆盖任意派生值，也允许新增自定义变量
+  const extra = {};
+  Object.keys(colors).forEach(key => {
+    if (key === 'accent' || key === 'secondary') return;
+    if (colors[key] === '' || colors[key] === null || colors[key] === undefined) return;
+    extra[key.replace(/_/g, '-')] = colors[key];
+  });
+
+  return Object.assign(derived, extra);
+}
+
 function resolveAsset(url) {
   if (!url) return '';
   const value = String(url);
@@ -252,6 +329,7 @@ hexo.extend.helper.register('echo_resource_types', resourceTypes);
 hexo.extend.helper.register('echo_resource_type', resourceTypeOf);
 hexo.extend.helper.register('echo_pan_color', panColor);
 hexo.extend.helper.register('echo_asset', resolveAsset);
+hexo.extend.helper.register('echo_color_vars', themeColorVars);
 hexo.extend.helper.register('echo_is_active', navActive);
 
 hexo.extend.helper.register('echo_cover', function (post) {
