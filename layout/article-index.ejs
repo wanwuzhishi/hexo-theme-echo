@@ -24,6 +24,23 @@
   <%- partial('_partial/rail-left') %>
 
   <div class="layout-main">
+    <%
+      // 文章分类导航：与资源库顶部的类型筛选同一套视觉
+      var artCats = echo_track_categories('article');
+      var artBase = page.articleBase || 'articles';
+    %>
+    <nav class="filter-nav" aria-label="文章分类筛选">
+      <a class="filter-chip <%= page.current === 1 || !page.current ? 'is-active' : '' %>"
+         href="<%- url_for('/' + artBase + '/') %>">
+        全部<span class="filter-count"><%= total %></span>
+      </a>
+      <% artCats.forEach(function (cat) { %>
+        <a class="filter-chip" href="<%- url_for(cat.path) %>">
+          <%- echo_icon('folder', 14) %> <%= cat.name %><span class="filter-count"><%= cat.count %></span>
+        </a>
+      <% }); %>
+    </nav>
+
     <% if (!posts.length) { %>
       <div class="empty-state"><%- echo_icon('file-text', 30) %><p>还没有文章，去 <code>source/_posts</code> 写一篇吧。</p></div>
     <% } else { %>

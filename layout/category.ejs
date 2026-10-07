@@ -1,5 +1,12 @@
 <%
   var hcfg = theme.header || {};
+  // 当前分类属于文章轨时，顶部显示与文章总页一致的分类导航
+  var curCat = page.category ? site.categories.findOne({ name: page.category }) : null;
+  var isArticleCat = !!(curCat && curCat.posts.toArray().some(function (p) {
+    return !(p.resource && p.resource.enable);
+  }));
+  var artCats = isArticleCat ? echo_track_categories('article') : [];
+  var artTotal = artCats.reduce(function (s, c) { return s + c.count; }, 0);
 %>
 <div class="page-banner <%= hcfg.banner ? 'has-banner' : '' %>"
      <% if (hcfg.banner) { %>style="background-image:url('<%- echo_asset(hcfg.banner) %>')"<% } %>>
@@ -16,6 +23,20 @@
   <%- partial('_partial/rail-left') %>
 
   <div class="layout-main">
+    <% if (artCats.length) { %>
+      <nav class="filter-nav" aria-label="文章分类筛选">
+        <a class="filter-chip" href="<%- url_for('/articles/') %>">
+          全部<span class="filter-count"><%= artTotal %></span>
+        </a>
+        <% artCats.forEach(function (cat) { %>
+          <a class="filter-chip <%= cat.name === page.category ? 'is-active' : '' %>"
+             href="<%- url_for(cat.path) %>">
+            <%- echo_icon('folder', 14) %> <%= cat.name %><span class="filter-count"><%= cat.count %></span>
+          </a>
+        <% }); %>
+      </nav>
+    <% } %>
+
     <div class="post-grid">
       <% page.posts.forEach(function (post) { %>
         <%- partial('_partial/post-card', { post: post }) %>

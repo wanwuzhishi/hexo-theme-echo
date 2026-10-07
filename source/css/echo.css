@@ -797,8 +797,9 @@ code, kbd, pre { font-family: var(--font-mono); }
 .resource-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border-soft); }
 .resource-actions .btn { flex: 1; min-width: 0; }
 
-/* ---------- Resource filter ---------- */
-.resource-filter {
+/* ---------- Filter chips（资源类型 / 文章分类导航） ---------- */
+.resource-filter,
+.filter-nav {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;

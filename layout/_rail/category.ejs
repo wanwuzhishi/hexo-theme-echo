@@ -2,7 +2,19 @@
   var cfg = theme.category || {};
   if (!cfg.enable) return;
   var limit = Number(cfg.limit) || 8;
-  var cats = site.categories.sort('length', -1).limit(limit).toArray();
+
+  // 按当前页面上下文决定展示哪个轨道的分类：
+  //   资源上下文（资源总页 / 类型页 / 资源详情帖）→ 只显示含资源帖的分类
+  //   文章上下文（文章总页 / 普通文章详情页）    → 只显示含文章的分类
+  //   其余（首页 / 归档等）                      → 显示全部分类
+  var track = null;
+  if (page.resourceIndex || page.resourceType || (page.resource && page.resource.enable)) {
+    track = 'resource';
+  } else if (page.articleIndex || is_post()) {
+    track = 'article';
+  }
+
+  var cats = echo_track_categories(track).slice(0, limit);
   if (!cats.length) return;
 %>
 <section class="rail-card">
@@ -14,7 +26,7 @@
       <li>
         <a href="<%- url_for(cat.path) %>">
           <span class="cat-name" title="<%= cat.name %>"><%= cat.name %></span>
-          <span class="cat-count"><%= cat.length %></span>
+          <span class="cat-count"><%= cat.count %></span>
         </a>
       </li>
     <% }); %>

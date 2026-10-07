@@ -272,3 +272,21 @@ hexo.extend.helper.register('echo_tags', function (post, limit) {
   const list = post.tags.toArray().map(t => ({ name: t.name, path: t.path }));
   return limit ? list.slice(0, Number(limit)) : list;
 });
+
+// 按内容轨道取分类列表：
+//   track = 'article'  → 只返回含有「文章」（非资源帖）的分类
+//   track = 'resource' → 只返回含有「资源帖」（resource.enable: true）的分类
+//   track = null/其他  → 返回全部分类
+// 返回 [{ name, path, count }]，按内容数降序。count 是该轨道内的帖子数。
+hexo.extend.helper.register('echo_track_categories', function (track) {
+  const isRes = p => !!(p && p.resource && p.resource.enable);
+  const cats = this.site.categories.toArray().map(cat => {
+    const posts = cat.posts.toArray();
+    const scoped = track === 'article' ? posts.filter(p => !isRes(p))
+      : track === 'resource' ? posts.filter(isRes)
+      : posts;
+    return { name: cat.name, path: cat.path, count: scoped.length };
+  }).filter(cat => cat.count > 0);
+  return cats.sort((a, b) => b.count - a.count || (a.name < b.name ? -1 : 1));
+});
+
