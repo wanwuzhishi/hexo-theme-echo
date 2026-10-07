@@ -3,6 +3,8 @@
   var banner = hcfg.banner;
   var overlay = (hcfg.overlay === undefined) ? 0.72 : Number(hcfg.overlay);
   var menu = theme.menu || {};
+  // 导航栏品牌图标：header.logo > 站点 favicon > 主题 favicon > 内置线条标识
+  var brandLogo = hcfg.logo || config.favicon || theme.favicon || '';
   var current = page.path || '';
   var keys = Object.keys(menu);
   // 首页顶部大图时，导航悬浮在大图上，白字透明底
@@ -19,10 +21,14 @@
   <div class="header-inner">
     <a class="brand" href="<%- url_for('/') %>" aria-label="<%= config.title %> 首页">
       <span class="brand-mark" aria-hidden="true">
+        <% if (brandLogo) { %>
+        <img src="<%- echo_asset(brandLogo) %>" alt="" width="34" height="34">
+        <% } else { %>
         <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor"
              stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
           <path d="M6 4h12M6 12h9M6 20h12M6 4v16"/>
         </svg>
+        <% } %>
       </span>
       <span class="brand-text">
         <strong><%= config.title %></strong>

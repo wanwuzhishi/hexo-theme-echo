@@ -80,8 +80,15 @@
     }
   }
 </style>
-<link rel="icon" href="<%- url_for('/favicon.png') %>" type="image/png">
-<link rel="apple-touch-icon" href="<%- url_for('/favicon.png') %>">
+<%
+  // 站点图标：站点配置 > 主题配置 > 主题内置默认
+  var faviconPath = config.favicon || theme.favicon || '/images/favicon.svg';
+  var faviconExt = (faviconPath.split('?')[0].split('.').pop() || '').toLowerCase();
+  var faviconType = faviconExt === 'svg' ? 'image/svg+xml'
+    : (faviconExt === 'jpg' || faviconExt === 'jpeg') ? 'image/jpeg' : 'image/png';
+%>
+<link rel="icon" href="<%- echo_asset(faviconPath) %>" type="<%= faviconType %>">
+<link rel="apple-touch-icon" href="<%- echo_asset(faviconPath) %>">
 
 <script>
   (function () {

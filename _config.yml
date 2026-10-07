@@ -20,8 +20,16 @@ main_width_wide: 1240px
 # 左右侧栏宽度
 rail_width: 240px
 
+# --- 站点图标 ---
+# 浏览器标签栏 / 收藏夹 / 桌面快捷方式图标（建议 180×180 以上的 png）
+# 留空则使用主题内置的 /images/favicon.svg
+# 站点自己的 _config.yml 里写 favicon: /xxx.png 可覆盖本项
+favicon: /images/favicon.svg
+
 # --- 顶部导航 ---
 header:
+  # 导航栏品牌图标（网站名左侧）；留空则依次回退到 favicon、主题内置线条标识
+  logo: ''
   # 顶部横幅背景图，留空则不显示
   banner: /images/covers/hexo-theme.svg
   # 背景图遮罩透明度 0~1
