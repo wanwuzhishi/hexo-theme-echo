@@ -1,11 +1,13 @@
 <%
   if (!theme.post || !theme.post.prev_next) return;
   var post = locals.post || page;
-  var prev = post.prev;
-  var next = post.next;
+  var adj = echo_adjacent_posts(post);
+  var prev = adj.prev;
+  var next = adj.next;
   if (!prev && !next) return;
+  var isResource = !!(post.resource && post.resource.enable);
 %>
-<nav class="post-nav" aria-label="上下篇">
+<nav class="post-nav <%= isResource ? 'is-resource' : '' %>" aria-label="上下篇">
   <% if (prev) { %>
     <a class="post-nav-item post-nav-prev" href="<%- url_for(prev.path) %>">
       <span class="post-nav-label"><%- echo_icon('chevron', 14) %> 上一篇</span>

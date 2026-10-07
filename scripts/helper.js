@@ -290,3 +290,42 @@ hexo.extend.helper.register('echo_track_categories', function (track) {
   return cats.sort((a, b) => b.count - a.count || (a.name < b.name ? -1 : 1));
 });
 
+// 把 front-matter 的排序字段解析成数字；缺失 / 空 / 非数字 → null（不参与自定义排序）
+function parseOrderNum(value) {
+  if (value === undefined || value === null || value === '') return null;
+  const n = Number(value);
+  return isNaN(n) ? null : n;
+}
+
+// 同轨道相邻文章（上一篇 / 下一篇）：文章与资源库互不串。
+//   - 资源帖（resource.enable: true）只在「资源轨道」内相邻；
+//   - 普通文章只在「文章轨道」内相邻。
+// 排序与列表一致：先按 front-matter 的 order（数值越小越靠前），未设置的按时间倒序。
+hexo.extend.helper.register('echo_adjacent_posts', function (post) {
+  if (!post || !post.path) return { prev: null, next: null };
+  const isRes = !!(post.resource && post.resource.enable);
+  const list = (this.site && this.site.posts) ? this.site.posts.toArray() : [];
+  const track = list.filter(function (p) {
+    return !!(p.resource && p.resource.enable) === isRes;
+  });
+  const sorted = track.slice().sort(function (a, b) {
+    const ka = parseOrderNum(a.order);
+    const kb = parseOrderNum(b.order);
+    const da = a.date ? a.date.unix() : 0;
+    const db = b.date ? b.date.unix() : 0;
+    if (ka !== null && kb !== null) return ka - kb;
+    if (ka !== null) return -1;
+    if (kb !== null) return 1;
+    return db - da;
+  });
+  let idx = -1;
+  for (let i = 0; i < sorted.length; i++) {
+    if (sorted[i].path === post.path) { idx = i; break; }
+  }
+  if (idx < 0) return { prev: null, next: null };
+  return {
+    prev: idx > 0 ? sorted[idx - 1] : null,
+    next: idx < sorted.length - 1 ? sorted[idx + 1] : null
+  };
+});
+
