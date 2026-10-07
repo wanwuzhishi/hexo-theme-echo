@@ -1039,6 +1039,29 @@ code, kbd, pre { font-family: var(--font-mono); }
 [data-theme-hint='light'] .page-banner.has-banner .page-banner-desc strong,
 [data-theme-hint='light'] .page-banner .page-banner-desc strong { color: var(--accent-text); }
 
+/* --- 3. 窄屏抽屉导航 ---
+   抽屉是自带实底（background: var(--bg-elev)）的浮层，不属于「导航有实底」，
+   但它的链接会继承 hero 悬浮态的白字，浅色主题下就成了白底白字。
+   所以这里在 ≤900px 时强制改回跟随主题的文字色。
+   注意：抽屉关闭时不可见，但为了 tab 键可达性保持可读配色即可。 */
+@media (max-width: 900px) {
+  [data-theme='light'] .site-nav .nav-link,
+  [data-theme-hint='light'] .site-nav .nav-link { color: #1e293b; }
+  [data-theme='light'] .site-nav .nav-link:hover,
+  [data-theme='light'] .site-nav .nav-link.is-active,
+  [data-theme-hint='light'] .site-nav .nav-link:hover,
+  [data-theme-hint='light'] .site-nav .nav-link.is-active {
+    background: var(--accent-soft);
+    color: var(--accent-text);
+  }
+  /* 抽屉底色在浅色下是纯白，给一点分隔层次 */
+  [data-theme='light'] .site-nav,
+  [data-theme-hint='light'] .site-nav {
+    background: var(--bg-elev);
+    border-bottom: 1px solid var(--border);
+  }
+}
+
 
 
 /* ==========================================================================
