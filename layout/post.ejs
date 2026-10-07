@@ -63,16 +63,7 @@
 
       <% if (isResource) { %>
         <section class="resource-summary">
-          <%
-            var summaryFields = [
-              { key: 'version', label: '版本' },
-              { key: 'platform', label: '平台' },
-              { key: 'size', label: '大小' },
-              { key: 'language', label: '语言' },
-              { key: 'updated', label: '更新日期' }
-            ];
-          %>
-          <% summaryFields.forEach(function (f) { %>
+          <% echo_resource_fields(['updated']).forEach(function (f) { %>
             <% if (res[f.key]) { %>
               <div class="summary-item">
                 <span class="summary-label"><%= f.label %></span>

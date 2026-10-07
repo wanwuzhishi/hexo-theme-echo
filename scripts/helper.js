@@ -4,8 +4,6 @@
 
 'use strict';
 
-const path = require('path');
-
 const ICONS = {
   /* 通用界面 */
   home: '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
@@ -172,6 +170,32 @@ function panColor(name) {
   if (colors && colors[name]) return colors[name];
   return '';
 }
+
+/**
+ * 资源帖字段的「键 → 中文标签」映射。
+ * post.ejs / post-card.ejs / resource-card.ejs 三处都要用，
+ * 统一在这里定义，避免三处各写一份、以后改字段名时漏改。
+ */
+const RESOURCE_FIELD_LABELS = {
+  version: '版本',
+  platform: '平台',
+  size: '大小',
+  language: '语言',
+  updated: '更新日期'
+};
+
+/** 展开成 [{ key, label }]，并按 resource.show_fields 过滤掉不需要展示的字段 */
+hexo.extend.helper.register('echo_resource_fields', function (extra) {
+  const cfg = (hexo.theme.config.resource) || {};
+  const show = Array.isArray(cfg.show_fields) && cfg.show_fields.length
+    ? cfg.show_fields
+    : ['version', 'platform', 'size', 'language'];
+  // extra 用于调用方临时追加字段（如 post.ejs 的 updated）
+  const keys = extra ? show.concat(extra.filter(k => show.indexOf(k) < 0)) : show;
+  return keys
+    .map(key => ({ key: key, label: RESOURCE_FIELD_LABELS[key] || key }))
+    .filter(f => f.label);
+});
 
 /* ==========================================================
    主题色彩：由一个主色自动派生出一整套配色变量

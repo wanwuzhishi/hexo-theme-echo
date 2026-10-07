@@ -43,14 +43,10 @@
 
     <% if (isResource) { %>
       <div class="card-fields">
-        <%
-          var fields = (theme.resource && theme.resource.show_fields) || ['version', 'platform', 'size', 'language'];
-          var labels = { version: '版本', platform: '平台', size: '大小', language: '语言' };
-          var shown = 0;
-        %>
-        <% fields.forEach(function (key) { %>
-          <% if (post.resource[key] && shown < 3) { shown++; %>
-            <span class="field-chip"><em><%= labels[key] || key %></em><%= post.resource[key] %></span>
+        <% var shown = 0; %>
+        <% echo_resource_fields().forEach(function (f) { %>
+          <% if (post.resource[f.key] && shown < 3) { shown++; %>
+            <span class="field-chip"><em><%= f.label %></em><%= post.resource[f.key] %></span>
           <% } %>
         <% }); %>
         <% if (!shown) { %>

@@ -4,8 +4,6 @@
   var cover = echo_cover(post);
   var res = post.resource || {};
   var links = Array.isArray(res.links) ? res.links : [];
-  var fields = (theme.resource && theme.resource.show_fields) || ['version', 'platform', 'size', 'language'];
-  var labels = { version: '版本', platform: '平台', size: '大小', language: '语言', updated: '更新' };
 %>
 <article class="resource-card">
   <a class="resource-cover" href="<%- url_for(post.path) %>" aria-hidden="true" tabindex="-1">
@@ -30,9 +28,9 @@
     <p class="resource-excerpt"><%- echo_truncate(post.excerpt || post.content, 90) %></p>
 
     <div class="resource-fields">
-      <% fields.forEach(function (key) { %>
-        <% if (res[key]) { %>
-          <span class="field-chip"><em><%= labels[key] || key %></em><%= res[key] %></span>
+      <% echo_resource_fields(['updated']).forEach(function (f) { %>
+        <% if (res[f.key]) { %>
+          <span class="field-chip"><em><%= f.label %></em><%= res[f.key] %></span>
         <% } %>
       <% }); %>
     </div>
