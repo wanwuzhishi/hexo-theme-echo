@@ -911,7 +911,8 @@ code, kbd, pre { font-family: var(--font-mono); }
   font-weight: 800;
   letter-spacing: -.02em;
 }
-.page-banner-title .icon { color: var(--accent); }
+/* 图标跟随标题文字色，不再单独用主色蓝——横幅标题是一个整体 */
+.page-banner-title .icon { color: currentColor; opacity: .85; }
 .page-banner.has-banner .page-banner-title,
 .page-banner.has-banner .page-banner-desc { color: #fff; }
 .page-banner-desc { margin: 0; font-size: 14px; color: var(--text-soft); }
@@ -957,41 +958,41 @@ code, kbd, pre { font-family: var(--font-mono); }
     linear-gradient(180deg, var(--banner-light) 0%, color-mix(in srgb, var(--banner-light) 55%, #fff) 100%) !important;
 }
 /* 浅蓝底上用常规描边收边 */
-[data-theme='light'] .site-header.has-banner,
-[data-theme-hint='light'] .site-header.has-banner {
+[data-theme='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner,
+[data-theme-hint='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner {
   border-bottom: 1px solid var(--banner-light-line);
 }
 /* 文字与图标：高对比深色（在浅蓝上清晰可读） */
-[data-theme='light'] .site-header .brand-text strong,
-[data-theme='light'] .site-header.has-banner .brand-text strong,
-[data-theme-hint='light'] .site-header .brand-text strong,
-[data-theme-hint='light'] .site-header.has-banner .brand-text strong { color: #0f172a; }
-[data-theme='light'] .site-header .brand-text small,
-[data-theme='light'] .site-header.has-banner .brand-text small,
-[data-theme-hint='light'] .site-header .brand-text small,
-[data-theme-hint='light'] .site-header.has-banner .brand-text small { color: #475569; }
-[data-theme='light'] .site-header .nav-link,
-[data-theme='light'] .site-header.has-banner .nav-link,
-[data-theme-hint='light'] .site-header .nav-link,
-[data-theme-hint='light'] .site-header.has-banner .nav-link { color: #1e293b; }
-[data-theme='light'] .site-header.has-banner .nav-link:hover,
-[data-theme='light'] .site-header.has-banner .nav-link.is-active,
-[data-theme-hint='light'] .site-header.has-banner .nav-link:hover,
-[data-theme-hint='light'] .site-header.has-banner .nav-link.is-active {
+[data-theme='light'] .site-header:not(.has-hero):not(.is-scrolled) .brand-text strong,
+[data-theme='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner .brand-text strong,
+[data-theme-hint='light'] .site-header:not(.has-hero):not(.is-scrolled) .brand-text strong,
+[data-theme-hint='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner .brand-text strong { color: #0f172a; }
+[data-theme='light'] .site-header:not(.has-hero):not(.is-scrolled) .brand-text small,
+[data-theme='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner .brand-text small,
+[data-theme-hint='light'] .site-header:not(.has-hero):not(.is-scrolled) .brand-text small,
+[data-theme-hint='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner .brand-text small { color: #475569; }
+[data-theme='light'] .site-header:not(.has-hero):not(.is-scrolled) .nav-link,
+[data-theme='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner .nav-link,
+[data-theme-hint='light'] .site-header:not(.has-hero):not(.is-scrolled) .nav-link,
+[data-theme-hint='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner .nav-link { color: #1e293b; }
+[data-theme='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner .nav-link:hover,
+[data-theme='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner .nav-link.is-active,
+[data-theme-hint='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner .nav-link:hover,
+[data-theme-hint='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner .nav-link.is-active {
   background: color-mix(in srgb, #fff 62%, transparent);
   color: #0f172a;
 }
-[data-theme='light'] .site-header .icon-btn,
-[data-theme='light'] .site-header.has-banner .icon-btn,
-[data-theme-hint='light'] .site-header .icon-btn,
-[data-theme-hint='light'] .site-header.has-banner .icon-btn { color: #334155; }
-[data-theme='light'] .site-header.has-banner .icon-btn:hover,
-[data-theme-hint='light'] .site-header.has-banner .icon-btn:hover {
+[data-theme='light'] .site-header:not(.has-hero):not(.is-scrolled) .icon-btn,
+[data-theme='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner .icon-btn,
+[data-theme-hint='light'] .site-header:not(.has-hero):not(.is-scrolled) .icon-btn,
+[data-theme-hint='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner .icon-btn { color: #334155; }
+[data-theme='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner .icon-btn:hover,
+[data-theme-hint='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner .icon-btn:hover {
   background: color-mix(in srgb, #fff 62%, transparent);
   color: #0f172a;
 }
-[data-theme='light'] .site-header.has-banner .brand-mark,
-[data-theme-hint='light'] .site-header.has-banner .brand-mark { box-shadow: var(--shadow-sm); }
+[data-theme='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner .brand-mark,
+[data-theme-hint='light'] .site-header:not(.has-hero):not(.is-scrolled).has-banner .brand-mark { box-shadow: var(--shadow-sm); }
 
 /* --- 2. 内页横幅：明亮浅蓝 + 白卡片 --- */
 [data-theme='light'] .page-banner,
@@ -1028,7 +1029,7 @@ code, kbd, pre { font-family: var(--font-mono); }
 [data-theme='light'] .page-banner.has-banner .page-banner-title .icon,
 [data-theme='light'] .page-banner .page-banner-title .icon,
 [data-theme-hint='light'] .page-banner.has-banner .page-banner-title .icon,
-[data-theme-hint='light'] .page-banner .page-banner-title .icon { color: var(--accent-text); }
+[data-theme-hint='light'] .page-banner .page-banner-title .icon { color: currentColor; }
 [data-theme='light'] .page-banner.has-banner .page-banner-desc,
 [data-theme='light'] .page-banner .page-banner-desc,
 [data-theme-hint='light'] .page-banner.has-banner .page-banner-desc,
