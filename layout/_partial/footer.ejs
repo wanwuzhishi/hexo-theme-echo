@@ -10,7 +10,7 @@
         var menu = theme.menu || {};
       %>
       <% Object.keys(menu).slice(0, 8).forEach(function (name) { %>
-        <a href="<%- url_for(menu[name]) %>"><%= name %></a>
+        <a href="<%- url_for(menu[name]) %>"><% var fi = echo_nav_icon(name); %><% if (fi) { %><%- echo_icon(fi, 14) %><% } %><%= name %></a>
       <% }); %>
     </div>
   </div>

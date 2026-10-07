@@ -136,12 +136,9 @@ code, kbd, pre { font-family: var(--font-mono); }
 .rail-sticky::-webkit-scrollbar,
 .toc-card .toc-body::-webkit-scrollbar { display: none; }
 
-/* 宽屏（≥1680px）：左右侧栏齐全时，用 space-between 把放宽后多出的空间
-   摊进左右栏距（gap 仅作为最小间距），而不是堆在最外侧留白；
-   只开启单侧栏时仍保持居中 */
-@media (min-width: 1680px) {
-  .layout:has(.rail-left):has(.rail-right) { justify-content: space-between; }
-}
+/* 宽屏（≥1680px）：中栏的 --main-max 由 head.ejs 改成「总宽 − 两栏 − 两道栏距 − 内边距」，
+   侧栏外移多少中栏就长多少，所以这里回到居中即可 —— 不要用 space-between，
+   否则多出来的空间会被摊进「侧栏↔中栏」的缝里，变成两道大空隙。 */
 
 /* 响应式收栏顺序：先收起右栏，页面更窄时再收起左栏 */
 @media (max-width: 1280px) {
@@ -434,7 +431,7 @@ code, kbd, pre { font-family: var(--font-mono); }
 .nav-link {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
   padding: 7px 12px;
   border: none;
   border-radius: 9px;
@@ -444,6 +441,7 @@ code, kbd, pre { font-family: var(--font-mono); }
   color: var(--text-soft);
   transition: background .18s, color .18s;
 }
+.nav-link .icon { width: 16px; height: 16px; opacity: .9; flex: none; }
 .nav-link:hover { background: var(--accent-soft); color: var(--accent); }
 .nav-link.is-active { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
 
@@ -1463,6 +1461,119 @@ figure.highlight:hover > .code-copy { opacity: 1; }
 }
 
 /* ==========================================================================
+   正文增强组件（下载卡片 / 链接组 / 卡片网格 / 提示块）
+   供正文里手写 HTML 使用，统一走主题变量，深浅色自动跟随
+   ========================================================================== */
+.hd-dl,
+.hd-download {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 22px 0;
+}
+.hd-dl-main,
+.hd-download-btn {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 18px 22px;
+  border-radius: var(--radius);
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, var(--border));
+  background: linear-gradient(135deg, var(--accent-soft), transparent);
+  text-decoration: none !important;
+  transition: transform .2s var(--ease), box-shadow .2s var(--ease), border-color .2s var(--ease);
+}
+.hd-dl-main:hover,
+.hd-download-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: var(--shadow-md);
+}
+.hd-dl-ico,
+.hd-download-icon {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 35%, transparent);
+}
+.hd-dl-txt,
+.hd-download-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.hd-dl-txt strong,
+.hd-download-text strong { font-size: 16px; color: var(--text); }
+.hd-dl-txt small,
+.hd-download-text small { font-size: 13px; color: var(--text-soft); }
+.hd-dl-doc {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 11px 20px;
+  border-radius: 11px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
+  color: var(--text);
+  text-decoration: none !important;
+  transition: transform .15s var(--ease), border-color .15s var(--ease);
+}
+.hd-dl-doc:hover { transform: translateY(-1px); border-color: var(--accent); color: var(--accent); }
+
+.hd-links { display: flex; gap: 10px; flex-wrap: wrap; margin: 20px 0; }
+.hd-link {
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 18px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-elev);
+  color: var(--text);
+  text-decoration: none !important;
+  transition: transform .15s var(--ease), border-color .15s var(--ease);
+}
+.hd-link:hover { transform: translateY(-1px); border-color: var(--accent); color: var(--accent); }
+
+/* 卡片网格（关于页等内容用） */
+.ab-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+  gap: 14px;
+  margin: 20px 0;
+}
+.ab-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 16px 18px;
+  border-radius: var(--radius);
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+}
+.ab-card-icon { flex: none; width: 22px; height: 22px; font-size: 22px; line-height: 1.2; color: var(--accent); }
+.ab-card-title { font-weight: 600; line-height: 1.4; margin-bottom: 4px; color: var(--text); }
+.ab-card-desc { font-size: 13.5px; line-height: 1.65; color: var(--text-soft); }
+
+/* 提示块 */
+.admonition {
+  padding: 14px 18px;
+  margin: 20px 0;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  background: var(--bg-sunken);
+}
+.admonition.warning { border-left-color: var(--warn); }
+.admonition-title { font-weight: 600; margin-bottom: 6px; color: var(--text); }
+.admonition > p { margin: .5rem 0; }
+.admonition > p:first-child { margin-top: 0; }
+.admonition > p:last-child { margin-bottom: 0; }
+
+/* ==========================================================================
    Rail cards（左右侧栏卡片）
    ========================================================================== */
 .rail-card {
@@ -2084,7 +2195,8 @@ figure.highlight:hover > .code-copy { opacity: 1; }
 .footer-brand strong { font-size: 15.5px; font-weight: 700; }
 .footer-brand p { margin: 6px 0 0; font-size: 13px; line-height: 1.7; color: var(--text-mute); }
 .footer-links { display: flex; flex-wrap: wrap; gap: 8px 16px; align-content: flex-start; }
-.footer-links a { font-size: 13.5px; color: var(--text-soft); transition: color .18s; }
+.footer-links a { display: inline-flex; align-items: center; gap: 5px; font-size: 13.5px; color: var(--text-soft); transition: color .18s; }
+.footer-links a .icon { width: 14px; height: 14px; opacity: .85; flex: none; }
 .footer-links a:hover { color: var(--accent); }
 .footer-bottom {
   max-width: var(--max-width);

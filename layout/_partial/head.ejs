@@ -50,6 +50,7 @@
   var layoutMax = theme.layout_width || '1440px';
   var layoutGap = theme.layout_gap || '36px';
   var mainMax = theme.main_width || '820px';
+  var mainWide = theme.main_width_wide || '1240px';
 %>
 <style>
   :root {
@@ -58,19 +59,24 @@
     --layout-max: <%= layoutMax %>;
     --layout-gap: <%= layoutGap %>;
     --main-max: <%= mainMax %>;
+    --main-wide: <%= mainWide %>;
     /* 头部 / 页脚 / 横幅与三栏对齐 */
     --max-width: <%= layoutMax %>;
     --accent: <%= theme.accent || '#5b8cff' %>;
     --radius: <%= theme.radius || '14px' %>;
   }
-  /* 宽屏自适应：布局上限随视口放宽（92vw，封顶 1840px），正文列小幅加宽，
-     栏距下限同步放大；多余空间由 echo.css 的 space-between 摊进左右栏距 */
+  /* 宽屏自适应（≥1680px）：
+     1. 布局上限随视口放宽（94vw，封顶 2040px），先吃掉最外侧的空白；
+     2. 中栏不再写死，而是「吃满」剩余空间：总宽 − 左右栏 − 两道栏距 − 容器内边距，
+        这样侧栏向外挪多少，中栏就跟着长多少，侧栏与中栏之间始终只留一道栏距；
+     3. --main-wide 是封顶值，防止超宽屏把正文拉成一条过长的行。 */
   @media (min-width: 1680px) {
     :root {
-      --layout-max: min(92vw, 1840px);
-      --max-width: min(92vw, 1840px);
-      --main-max: 880px;
-      --layout-gap: clamp(36px, 3vw, 88px);
+      --layout-max: min(94vw, 2040px);
+      --max-width: min(94vw, 2040px);
+      --layout-gap: clamp(36px, 2.4vw, 72px);
+      --main-max: min(var(--main-wide, 1240px),
+        calc(var(--layout-max) - var(--rail-w-left) - var(--rail-w-right) - var(--layout-gap) * 2 - 48px));
     }
   }
 </style>

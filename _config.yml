@@ -15,6 +15,8 @@ layout_width: 1440px
 layout_gap: 36px
 # 中栏最大宽度
 main_width: 820px
+# 宽屏（≥1680px）下中栏的封顶宽度；实际宽度会随视口在 820px ~ 该值之间伸缩
+main_width_wide: 1240px
 # 左右侧栏宽度
 rail_width: 240px
 
