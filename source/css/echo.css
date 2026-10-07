@@ -925,6 +925,65 @@ code, kbd, pre { font-family: var(--font-mono); }
 }
 
 /* ==========================================================================
+   浅色主题下的横幅配色
+   深色大图压在浅色页面上会显得突兀，这里让浅色主题改用「主色浅底」，
+   颜色全部由 --accent / --secondary 派生，换主色时横幅自动跟着协调。
+   深色主题不受影响（见下方 data-theme='dark' 之外的默认规则）。
+   ========================================================================== */
+
+/* --- 1. 顶部导航横幅：换成主色浅底渐变 --- */
+[data-theme='light'] .site-header-bg,
+[data-theme='light'] .page-banner {
+  background-image: none !important;
+}
+[data-theme='light'] .site-header-bg {
+  background:
+    radial-gradient(760px 300px at 16% -20%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 70%),
+    radial-gradient(680px 280px at 92% 0%, color-mix(in srgb, var(--secondary) 20%, transparent), transparent 72%),
+    linear-gradient(180deg, color-mix(in srgb, var(--accent) 10%, var(--bg-elev)), var(--bg-elev));
+}
+/* 顶部横幅上的文字改回深色，保证浅底上的可读性 */
+[data-theme='light'] .site-header.has-banner .brand-text strong { color: var(--text); }
+[data-theme='light'] .site-header.has-banner .brand-text small { color: var(--text-mute); }
+[data-theme='light'] .site-header.has-banner .nav-link { color: var(--text-soft); }
+[data-theme='light'] .site-header.has-banner .nav-link:hover,
+[data-theme='light'] .site-header.has-banner .nav-link.is-active {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--accent-text);
+}
+[data-theme='light'] .site-header.has-banner .icon-btn { color: var(--text-soft); }
+[data-theme='light'] .site-header.has-banner .icon-btn:hover {
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  color: var(--accent-text);
+}
+/* 浅底上不需要重投影 */
+[data-theme='light'] .site-header.has-banner .brand-mark { box-shadow: var(--shadow-sm); }
+/* 浅色下遮罩会压灰底色，直接去掉 */
+[data-theme='light'] .site-header-scrim { background: none; }
+
+/* --- 2. 内页横幅：主色浅底 + 细描边 --- */
+[data-theme='light'] .page-banner {
+  background:
+    radial-gradient(820px 320px at 12% -18%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
+    linear-gradient(160deg, color-mix(in srgb, var(--accent) 7%, var(--bg-elev)), var(--bg-elev));
+  border-bottom: 1px solid var(--border);
+}
+[data-theme='light'] .page-banner-scrim { display: none; }
+[data-theme='light'] .page-banner-card {
+  background: color-mix(in srgb, var(--bg-elev) 86%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 16%, var(--border));
+  box-shadow: var(--shadow-sm);
+}
+[data-theme='light'] .page-banner-title,
+[data-theme='light'] .page-banner-desc { color: var(--text); }
+[data-theme='light'] .page-banner-desc { color: var(--text-soft); }
+[data-theme='light'] .page-banner-desc strong { color: var(--accent-text); }
+[data-theme='light'] .page-banner-title .icon { color: var(--accent-text); }
+/* 浅色主题横幅本身就是浅底，底部渐隐不再需要，收回为 0 省出留白 */
+[data-theme='light'] .page-banner.has-banner::after { display: none; }
+[data-theme='light'] .page-banner.has-banner .page-banner-inner { padding-bottom: 34px; }
+
+/* ==========================================================================
    Post single
    ========================================================================== */
 .post-single { padding-bottom: 8px; }
