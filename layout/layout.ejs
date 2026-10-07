@@ -1,5 +1,9 @@
-<!DOCTYPE html>
-<html lang="<%= config.language || 'zh-CN' %>" data-scheme="<%= theme.color_scheme || 'auto' %>">
+<%
+  // 与 head.ejs 的内联脚本保持一致：把配色方案直接输出到 html 上，
+  // 这样浅色专属样式（如浅蓝横幅）在 JS 执行前就能生效，不会出现发灰的闪帧。
+  var _scheme = theme.color_scheme || 'auto';
+%><!DOCTYPE html>
+<html lang="<%= config.language || 'zh-CN' %>" data-scheme="<%= _scheme %>" data-theme-hint="<%= _scheme === 'auto' ? '' : _scheme %>">
 <head>
   <%- partial('_partial/head') %>
 </head>

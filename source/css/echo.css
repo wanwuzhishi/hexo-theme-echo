@@ -929,64 +929,93 @@ code, kbd, pre { font-family: var(--font-mono); }
    浅色页面里深色大图 + 深色蒙层会又闷又割裂，所以浅色主题整套换成
    「明亮浅蓝」配色：取消大图与蒙层，底色用 --banner-light 浅蓝，
    文字/图标用高对比深色，边界靠细描边而不是重投影。
+
+   注意选择器：除了 [data-theme='light']（JS 手动/自动解析后的值），
+   还要覆盖 prefers-color-scheme: light —— 因为 auto 模式下 <html>
+   上的 data-theme 要等 JS 执行后才有值，JS 未跑完/被缓存时若只写
+   [data-theme='light'] 就会退回深色大图，出现「发灰」闪帧。
    ========================================================================== */
 
 /* --- 1. 顶部导航横幅：明亮浅蓝 --- */
 [data-theme='light'] .site-header-bg,
-[data-theme='light'] .page-banner {
+[data-theme='light'] .page-banner,
+[data-theme-hint='light'] .site-header-bg,
+[data-theme-hint='light'] .page-banner {
   background-image: none !important;
 }
 /* 关掉深色蒙层与深色叠加层——它们是浅色下发灰看不清的元凶 */
 [data-theme='light'] .site-header-bg.has-banner::after,
-[data-theme='light'] .site-header-scrim { display: none; }
-[data-theme='light'] .site-header-bg {
+[data-theme='light'] .site-header-scrim,
+[data-theme-hint='light'] .site-header-bg.has-banner::after,
+[data-theme-hint='light'] .site-header-scrim { display: none; }
+[data-theme='light'] .site-header-bg,
+[data-theme-hint='light'] .site-header-bg {
   background:
     radial-gradient(760px 340px at 12% -40%, color-mix(in srgb, #fff 55%, transparent), transparent 70%),
     linear-gradient(180deg, var(--banner-light) 0%, color-mix(in srgb, var(--banner-light) 55%, #fff) 100%);
 }
 /* 浅蓝底上用常规描边收边 */
-[data-theme='light'] .site-header.has-banner {
+[data-theme='light'] .site-header.has-banner,
+[data-theme-hint='light'] .site-header.has-banner {
   border-bottom: 1px solid var(--banner-light-line);
 }
 /* 文字与图标：高对比深色（在浅蓝上清晰可读） */
-[data-theme='light'] .site-header.has-banner .brand-text strong { color: #0f172a; }
-[data-theme='light'] .site-header.has-banner .brand-text small { color: #475569; }
-[data-theme='light'] .site-header.has-banner .nav-link { color: #1e293b; }
+[data-theme='light'] .site-header.has-banner .brand-text strong,
+[data-theme-hint='light'] .site-header.has-banner .brand-text strong { color: #0f172a; }
+[data-theme='light'] .site-header.has-banner .brand-text small,
+[data-theme-hint='light'] .site-header.has-banner .brand-text small { color: #475569; }
+[data-theme='light'] .site-header.has-banner .nav-link,
+[data-theme-hint='light'] .site-header.has-banner .nav-link { color: #1e293b; }
 [data-theme='light'] .site-header.has-banner .nav-link:hover,
-[data-theme='light'] .site-header.has-banner .nav-link.is-active {
+[data-theme='light'] .site-header.has-banner .nav-link.is-active,
+[data-theme-hint='light'] .site-header.has-banner .nav-link:hover,
+[data-theme-hint='light'] .site-header.has-banner .nav-link.is-active {
   background: color-mix(in srgb, #fff 62%, transparent);
   color: #0f172a;
 }
-[data-theme='light'] .site-header.has-banner .icon-btn { color: #334155; }
-[data-theme='light'] .site-header.has-banner .icon-btn:hover {
+[data-theme='light'] .site-header.has-banner .icon-btn,
+[data-theme-hint='light'] .site-header.has-banner .icon-btn { color: #334155; }
+[data-theme='light'] .site-header.has-banner .icon-btn:hover,
+[data-theme-hint='light'] .site-header.has-banner .icon-btn:hover {
   background: color-mix(in srgb, #fff 62%, transparent);
   color: #0f172a;
 }
-[data-theme='light'] .site-header.has-banner .brand-mark { box-shadow: var(--shadow-sm); }
+[data-theme='light'] .site-header.has-banner .brand-mark,
+[data-theme-hint='light'] .site-header.has-banner .brand-mark { box-shadow: var(--shadow-sm); }
 
 /* --- 2. 内页横幅：明亮浅蓝 + 白卡片 --- */
-[data-theme='light'] .page-banner {
+[data-theme='light'] .page-banner,
+[data-theme-hint='light'] .page-banner {
   background:
     radial-gradient(900px 360px at 8% -30%, color-mix(in srgb, #fff 50%, transparent), transparent 72%),
     linear-gradient(165deg, var(--banner-light) 0%, color-mix(in srgb, var(--banner-light) 45%, #fff) 100%);
   border-bottom: 1px solid var(--banner-light-line);
 }
-[data-theme='light'] .page-banner-scrim { display: none; }
+[data-theme='light'] .page-banner-scrim,
+[data-theme-hint='light'] .page-banner-scrim { display: none; }
 /* 横幅本身已是浅色，底部渐隐不需要了 */
-[data-theme='light'] .page-banner.has-banner::after { display: none; }
-[data-theme='light'] .page-banner.has-banner .page-banner-inner { padding-bottom: 34px; }
+[data-theme='light'] .page-banner.has-banner::after,
+[data-theme-hint='light'] .page-banner.has-banner::after { display: none; }
+[data-theme='light'] .page-banner.has-banner .page-banner-inner,
+[data-theme-hint='light'] .page-banner.has-banner .page-banner-inner { padding-bottom: 34px; }
 /* 卡片实心白 + 浅蓝描边 */
-[data-theme='light'] .page-banner-card {
+[data-theme='light'] .page-banner-card,
+[data-theme-hint='light'] .page-banner-card {
   background: #fff;
   border: 1px solid var(--banner-light-line);
   box-shadow: 0 2px 12px color-mix(in srgb, #0f172a 8%, transparent);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
-[data-theme='light'] .page-banner-title { color: #0f172a; }
-[data-theme='light'] .page-banner-title .icon { color: var(--accent-text); }
-[data-theme='light'] .page-banner-desc { color: #475569; }
-[data-theme='light'] .page-banner-desc strong { color: var(--accent-text); }
+[data-theme='light'] .page-banner-title,
+[data-theme-hint='light'] .page-banner-title { color: #0f172a; }
+[data-theme='light'] .page-banner-title .icon,
+[data-theme-hint='light'] .page-banner-title .icon { color: var(--accent-text); }
+[data-theme='light'] .page-banner-desc,
+[data-theme-hint='light'] .page-banner-desc { color: #475569; }
+[data-theme='light'] .page-banner-desc strong,
+[data-theme-hint='light'] .page-banner-desc strong { color: var(--accent-text); }
+
 
 
 /* ==========================================================================
