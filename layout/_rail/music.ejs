@@ -1,0 +1,77 @@
+<%
+  var cfg = theme.music || {};
+  if (!cfg.enable) return;
+  var list = Array.isArray(cfg.playlist) ? cfg.playlist : [];
+  var srcs = [];
+  if (list.length) {
+    list.forEach(function (item) {
+      var u = (typeof item === 'string') ? item : (item && item.src);
+      if (u) srcs.push(echo_asset(u));
+    });
+  } else if (cfg.src) {
+    srcs.push(echo_asset(cfg.src));
+  }
+  // 未配置音频源时整卡不渲染，避免出现无法操作的假播放器
+  if (!srcs.length) return;
+
+  var first = list.length && typeof list[0] === 'object' ? list[0] : {};
+  var trackName = first.name || cfg.name || '未命名曲目';
+  var trackArtist = first.artist || cfg.artist || '';
+  var trackCover = first.cover || cfg.cover || '';
+%>
+<section class="rail-card music-card" id="music-card">
+  <div class="rail-head">
+    <h3 class="rail-title"><%- echo_icon('music', 15) %> <%= cfg.title || '音乐' %></h3>
+  </div>
+
+  <div class="music-body">
+    <% if (trackCover) { %>
+      <img class="music-cover" src="<%- echo_asset(trackCover) %>" alt="<%= trackName %>"
+           loading="lazy" onerror="this.style.visibility='hidden'">
+    <% } else { %>
+      <span class="music-cover music-cover-fallback"><%- echo_icon('music', 20) %></span>
+    <% } %>
+    <div class="music-meta">
+      <strong class="music-name" title="<%= trackName %>"><%= trackName %></strong>
+      <span class="music-artist"><%= trackArtist %></span>
+    </div>
+  </div>
+
+  <div class="music-progress" id="music-progress" role="slider"
+       aria-label="播放进度" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" tabindex="0">
+    <div class="music-progress-fill" id="music-progress-fill"></div>
+  </div>
+
+  <div class="music-times">
+    <span id="music-current">00:00</span>
+    <span id="music-duration">00:00</span>
+  </div>
+
+  <div class="music-controls">
+    <button type="button" class="music-btn" id="music-shuffle" aria-label="随机播放" title="随机播放">
+      <%- echo_icon('shuffle', 17) %>
+    </button>
+    <button type="button" class="music-btn" id="music-prev" aria-label="上一首" title="上一首">
+      <%- echo_icon('skip-back', 18) %>
+    </button>
+    <button type="button" class="music-btn is-primary" id="music-play" aria-label="播放" title="播放">
+      <span class="music-icon-play"><%- echo_icon('play', 20) %></span>
+      <span class="music-icon-pause"><%- echo_icon('pause', 20) %></span>
+    </button>
+    <button type="button" class="music-btn" id="music-next" aria-label="下一首" title="下一首">
+      <%- echo_icon('skip-forward', 18) %>
+    </button>
+    <button type="button" class="music-btn" id="music-repeat" aria-label="循环" title="循环">
+      <%- echo_icon('repeat', 17) %>
+    </button>
+  </div>
+
+  <div class="music-volume">
+    <%- echo_icon('volume', 15) %>
+    <div class="music-volume-track" id="music-volume-track">
+      <div class="music-volume-fill" id="music-volume-fill"></div>
+    </div>
+  </div>
+
+  <audio id="music-audio" preload="none" data-srcs="<%- srcs.join('|') %>" src="<%- srcs[0] || '' %>"></audio>
+</section>

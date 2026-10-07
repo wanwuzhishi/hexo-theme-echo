@@ -1,0 +1,16 @@
+<div class="search-overlay" id="search-overlay" hidden>
+  <div class="search-panel" role="dialog" aria-modal="true" aria-label="站内搜索">
+    <div class="search-input-wrap">
+      <%- echo_icon('search', 20) %>
+      <input type="search" id="search-input" placeholder="搜索文章、资源、MOD、汉化…" autocomplete="off" spellcheck="false">
+      <button type="button" class="icon-btn" id="search-close" aria-label="关闭搜索">
+        <%- echo_icon('close', 18) %>
+      </button>
+    </div>
+    <div class="search-meta">
+      <span id="search-status">输入关键词开始搜索</span>
+      <kbd>Esc</kbd>
+    </div>
+    <div class="search-results" id="search-results"></div>
+  </div>
+</div>

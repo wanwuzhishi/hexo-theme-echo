@@ -1,0 +1,26 @@
+<%
+  var cfg = theme.profile || {};
+  if (!cfg.enable) return;
+  var social = Array.isArray(cfg.social) ? cfg.social : [];
+%>
+<section class="rail-card profile-card">
+  <div class="profile-avatar-wrap">
+    <img class="profile-avatar" src="<%- echo_asset(cfg.avatar) %>"
+         alt="<%= cfg.name || config.author %>" loading="lazy"
+         onerror="this.onerror=null;this.src='<%- url_for('/images/avatar.svg') %>'">
+  </div>
+  <h3 class="profile-name"><%= cfg.name || config.author %></h3>
+  <p class="profile-bio"><%= cfg.bio || config.description %></p>
+
+  <% if (social.length) { %>
+    <div class="profile-social">
+      <% social.forEach(function (item) { %>
+        <a class="social-btn" href="<%- url_for(item.url) %>"
+           title="<%= item.title || item.name %>" aria-label="<%= item.title || item.name %>"
+           <% if (!/^mailto:/.test(item.url)) { %>target="_blank" rel="noopener"<% } %>>
+          <%- echo_icon(item.name, 19) %>
+        </a>
+      <% }); %>
+    </div>
+  <% } %>
+</section>

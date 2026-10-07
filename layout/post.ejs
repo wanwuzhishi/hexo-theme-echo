@@ -1,0 +1,110 @@
+<%
+  var post = page;
+  var res = post.resource || {};
+  var isResource = res.enable;
+  var type = isResource ? echo_resource_type(post) : null;
+  var cats = echo_categories(post);
+  var tags = echo_tags(post);
+  var words = echo_word_count(post.content);
+  var minutes = echo_reading_time(post.content);
+  var base = (config.resources && config.resources.path) || 'resources';
+  var showIntro = !theme.post || theme.post.intro !== false;
+  var updatedText = (post.updated && theme.post && theme.post.updated && String(post.updated) !== String(post.date))
+    ? echo_date(post.updated, 'YYYY-MM-DD HH:mm') : '';
+%>
+
+<div class="layout layout-post">
+  <%- partial('_partial/rail-left') %>
+
+  <div class="layout-main">
+    <article class="post-single <%= isResource ? 'is-resource-post' : '' %>">
+      <header class="post-header">
+        <div class="post-chips">
+          <span class="chip"><%- echo_icon('trending-up', 15) %> <%= words %> 字</span>
+          <span class="chip"><%- echo_icon('clock', 15) %> <%= minutes %> 分钟</span>
+          <% if (isResource) { %>
+            <a class="chip is-accent" href="<%- url_for('/' + base + '/' + type.key + '/') %>">
+              <%- echo_icon(type.icon, 15) %> <%= type.name %>
+            </a>
+          <% } %>
+        </div>
+
+        <h1 class="post-title"><%= post.title %></h1>
+
+        <div class="post-metas">
+          <span class="meta-chip">
+            <%- echo_icon('calendar', 15) %>
+            <time datetime="<%- post.date.toISOString() %>"><%- echo_date(post.date) %></time>
+          </span>
+          <% if (cats.length || tags.length) { %>
+            <span class="meta-chip">
+              <%- echo_icon('tag', 15) %>
+              <span class="meta-links">
+                <% cats.forEach(function (cat, i) { %>
+                  <a href="<%- url_for(cat.path) %>"><%= cat.name %></a><%= (i < cats.length - 1 || tags.length) ? ' / ' : '' %>
+                <% }); %>
+                <% tags.forEach(function (tag, i) { %>
+                  <a href="<%- url_for(tag.path) %>"><%= tag.name %></a><%= i < tags.length - 1 ? ' / ' : '' %>
+                <% }); %>
+              </span>
+            </span>
+          <% } %>
+          <% if (updatedText) { %>
+            <span class="meta-chip">
+              <%- echo_icon('activity', 15) %> 更新于 <%= updatedText %>
+            </span>
+          <% } %>
+        </div>
+      </header>
+
+      <% if (showIntro && post.description) { %>
+        <p class="post-intro"><%= post.description %></p>
+      <% } %>
+
+      <% if (isResource) { %>
+        <section class="resource-summary">
+          <%
+            var summaryFields = [
+              { key: 'version', label: '版本' },
+              { key: 'platform', label: '平台' },
+              { key: 'size', label: '大小' },
+              { key: 'language', label: '语言' },
+              { key: 'updated', label: '更新日期' }
+            ];
+          %>
+          <% summaryFields.forEach(function (f) { %>
+            <% if (res[f.key]) { %>
+              <div class="summary-item">
+                <span class="summary-label"><%= f.label %></span>
+                <span class="summary-value"><%= f.key === 'updated' ? echo_date(res[f.key]) : res[f.key] %></span>
+              </div>
+            <% } %>
+          <% }); %>
+        </section>
+      <% } %>
+
+      <%- partial('_partial/toc-inline', { post: post }) %>
+
+      <div class="post-content" id="post-content">
+        <%- post.content %>
+      </div>
+
+      <% if (isResource) { %>
+        <%- partial('_partial/pan-block', { post: post }) %>
+      <% } %>
+
+      <% if (tags.length) { %>
+        <div class="post-tags">
+          <% tags.forEach(function (tag) { %>
+            <a class="tag-chip" href="<%- url_for(tag.path) %>"><%= tag.name %></a>
+          <% }); %>
+        </div>
+      <% } %>
+
+      <%- partial('_partial/copyright', { post: post }) %>
+      <%- partial('_partial/post-nav', { post: post }) %>
+    </article>
+  </div>
+
+  <%- partial('_partial/rail-right') %>
+</div>

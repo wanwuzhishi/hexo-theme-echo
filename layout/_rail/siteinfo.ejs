@@ -1,0 +1,32 @@
+<%
+  var cfg = theme.siteinfo || {};
+  if (cfg.enable === false) return;
+  var rows = Array.isArray(cfg.rows) && cfg.rows.length ? cfg.rows : [
+    { icon: 'layers', label: '构建平台', value: cfg.build || 'Hexo' },
+    { icon: 'info', label: '博客版本', value: cfg.version || 'Echo 1.0' },
+    { icon: 'file-text', label: '许可协议', value: cfg.license || 'CC BY-NC-SA 4.0' }
+  ];
+  var domain = cfg.domain || config.url || '';
+%>
+<section class="rail-card siteinfo-card">
+  <div class="rail-head">
+    <h3 class="rail-title"><%- echo_icon('info', 15) %> <%= cfg.title || '站点信息' %></h3>
+  </div>
+  <ul class="info-rows">
+    <% rows.forEach(function (row) { %>
+      <li>
+        <span class="info-label"><%- echo_icon(row.icon || 'info', 15) %> <%= row.label %></span>
+        <span class="info-value"><%= row.value %></span>
+      </li>
+    <% }); %>
+  </ul>
+  <% if (domain) { %>
+    <div class="info-domain">
+      <span class="info-domain-icon"><%- echo_icon('layers', 18) %></span>
+      <span class="info-domain-text">
+        <small>站点域名</small>
+        <strong><%= String(domain).replace(/^https?:\/\//, '').replace(/\/+$/, '') %></strong>
+      </span>
+    </div>
+  <% } %>
+</section>

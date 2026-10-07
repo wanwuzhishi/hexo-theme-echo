@@ -1,0 +1,31 @@
+<%
+  var cfg = theme.stats || {};
+  if (!cfg.enable) return;
+  var show = Array.isArray(cfg.show) ? cfg.show : ['posts', 'categories', 'tags', 'words', 'runtime', 'updated'];
+  var runtime = echo_site_runtime(cfg.since);
+  var words = echo_site_words(site.posts);
+  var rows = {
+    posts: { icon: 'file-text', label: '文章', value: site.posts.length, cls: '' },
+    categories: { icon: 'folder-tree', label: '分类', value: site.categories.length, cls: '' },
+    tags: { icon: 'tag', label: '标签', value: site.tags.length, cls: '' },
+    words: { icon: 'trending-up', label: '总字数', value: words.toLocaleString('en-US'), cls: 'is-accent' },
+    runtime: { icon: 'timer', label: '运行时长', value: runtime.days, unit: '天', cls: '' },
+    updated: { icon: 'activity', label: '最后活动', value: echo_last_activity(site.posts) || '--', cls: '' }
+  };
+%>
+<section class="rail-card stats-card">
+  <div class="rail-head">
+    <h3 class="rail-title"><%- echo_icon('layers', 15) %> <%= cfg.title || '统计' %></h3>
+  </div>
+  <ul class="stat-rows">
+    <% show.forEach(function (key) { %>
+      <% var row = rows[key]; if (!row) return; %>
+      <li>
+        <span class="stat-label"><%- echo_icon(row.icon, 16) %> <%= row.label %></span>
+        <span class="stat-value <%= row.cls %>">
+          <%= row.value %><% if (row.unit) { %><em class="stat-unit"><%= row.unit %></em><% } %>
+        </span>
+      </li>
+    <% }); %>
+  </ul>
+</section>

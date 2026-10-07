@@ -1,0 +1,20 @@
+<%
+  // 仅当右栏（含目录）被响应式收起时，在正文内提供一份可折叠目录
+  var post = locals.post || page;
+  var tocCfg = theme.toc || {};
+  if (theme.post && theme.post.toc === false) return;
+  if (tocCfg.enable === false) return;
+  if (!post || !post.content) return;
+  var depth = Number(tocCfg.depth || (theme.post && theme.post.toc_depth) || 3);
+  var tocHtml = toc(post.content, { depth: depth + 1, class: 'toc', list_number: false });
+  if (!tocHtml || !tocHtml.trim()) return;
+%>
+<details class="toc-inline" open>
+  <summary class="toc-inline-head">
+    <span class="toc-inline-title"><%- echo_icon('list', 15) %> <%= tocCfg.title || '目录' %></span>
+    <span class="toc-inline-hint">点击展开 / 收起</span>
+  </summary>
+  <nav class="toc-body toc-inline-body" aria-label="文章目录">
+    <%- tocHtml %>
+  </nav>
+</details>

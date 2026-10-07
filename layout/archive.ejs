@@ -1,0 +1,55 @@
+<%
+  var hcfg = theme.header || {};
+  var posts = page.posts ? page.posts.toArray() : [];
+  var groups = {};
+  posts.forEach(function (post) {
+    var year = post.date.format('YYYY');
+    if (!groups[year]) groups[year] = [];
+    groups[year].push(post);
+  });
+  var years = Object.keys(groups).sort(function (a, b) { return b - a; });
+%>
+<div class="page-banner <%= hcfg.banner ? 'has-banner' : '' %>"
+     <% if (hcfg.banner) { %>style="background-image:url('<%- echo_asset(hcfg.banner) %>')"<% } %>>
+  <span class="page-banner-scrim" style="opacity:<%= (hcfg.overlay === undefined) ? 0.72 : Number(hcfg.overlay) %>"></span>
+  <div class="page-banner-inner">
+    <div class="page-banner-card">
+      <h1 class="page-banner-title"><%- echo_icon('archive', 24) %> 归档</h1>
+      <p class="page-banner-desc">按年份浏览全部 <strong><%= posts.length %></strong> 篇内容</p>
+    </div>
+  </div>
+</div>
+
+<div class="layout layout-3col">
+  <%- partial('_partial/rail-left') %>
+
+  <div class="layout-main">
+    <% if (!years.length) { %>
+      <div class="empty-state"><%- echo_icon('archive', 30) %><p>暂无归档内容。</p></div>
+    <% } %>
+
+    <% years.forEach(function (year) { %>
+      <section class="archive-year">
+        <h2 class="archive-year-title">
+          <span class="year-num"><%= year %></span>
+          <span class="year-count"><%= groups[year].length %> 篇</span>
+        </h2>
+        <ul class="archive-list">
+          <% groups[year].forEach(function (post) { %>
+            <li class="archive-item">
+              <time class="archive-date"><%= post.date.format('MM-DD') %></time>
+              <a class="archive-link" href="<%- url_for(post.path) %>">
+                <span class="archive-title"><%= post.title %></span>
+                <% if (post.resource && post.resource.enable) { %>
+                  <em class="archive-badge"><%= echo_resource_type(post).name %></em>
+                <% } %>
+              </a>
+            </li>
+          <% }); %>
+        </ul>
+      </section>
+    <% }); %>
+  </div>
+
+  <%- partial('_partial/rail-right') %>
+</div>

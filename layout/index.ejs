@@ -1,0 +1,81 @@
+<%
+  var entries = theme.index && theme.index.show_resource_entries;
+  var types = echo_resource_types();
+  var counts = {};
+  types.forEach(function (t) { counts[t.key] = 0; });
+  var totalRes = 0;
+  site.posts.forEach(function (p) {
+    if (p.resource && p.resource.enable) {
+      totalRes++;
+      var k = (p.resource.type || 'other').toString().trim() || 'other';
+      counts[k] = (counts[k] || 0) + 1;
+    }
+  });
+  var base = (config.resources && config.resources.path) || 'resources';
+  var heroOn = !(theme.hero && theme.hero.enable === false);
+%>
+
+<% if (heroOn) { %><%- partial('_partial/hero') %><% } %>
+
+<div class="layout layout-3col">
+  <%- partial('_partial/rail-left') %>
+
+  <div class="layout-main">
+    <% if (!heroOn) { %>
+    <section class="home-intro">
+      <h1 class="home-title"><%= (theme.index && theme.index.banner_title) || config.title %></h1>
+      <p class="home-desc"><%= config.description %></p>
+      <div class="home-actions">
+        <a class="btn btn-primary" href="<%- url_for('/' + base + '/') %>">
+          <%- echo_icon('layers', 17) %> 进入资源库
+        </a>
+        <a class="btn btn-ghost" href="<%- url_for('/archives/') %>">
+          <%- echo_icon('archive', 17) %> 浏览归档
+        </a>
+      </div>
+    </section>
+    <% } %>
+
+    <% if (entries && types.length) { %>
+      <section class="home-section">
+        <div class="section-head">
+          <h2 class="section-title"><%- echo_icon('layers', 18) %> 资源分类</h2>
+          <a class="section-more" href="<%- url_for('/' + base + '/') %>">全部 <%- echo_icon('chevron', 13) %></a>
+        </div>
+        <div class="entry-grid">
+          <% types.forEach(function (type) { %>
+            <a class="entry-card" href="<%- url_for('/' + base + '/' + type.key + '/') %>">
+              <span class="entry-icon"><%- echo_icon(type.icon, 20) %></span>
+              <span class="entry-text">
+                <strong><%= type.name %></strong>
+                <small><%= counts[type.key] || 0 %> 个</small>
+              </span>
+              <%- echo_icon('chevron', 15) %>
+            </a>
+          <% }); %>
+        </div>
+      </section>
+    <% } %>
+
+    <section class="home-section">
+      <div class="section-head">
+        <h2 class="section-title"><%- echo_icon('clock', 18) %> 最新发布</h2>
+        <a class="section-more" href="<%- url_for('/archives/') %>">归档 <%- echo_icon('chevron', 13) %></a>
+      </div>
+
+      <% if (!page.posts || !page.posts.length) { %>
+        <div class="empty-state"><%- echo_icon('info', 30) %><p>还没有内容，去 <code>source/_posts</code> 写第一篇吧。</p></div>
+      <% } else { %>
+        <div class="post-grid">
+          <% page.posts.forEach(function (post) { %>
+            <%- partial('_partial/post-card', { post: post }) %>
+          <% }); %>
+        </div>
+      <% } %>
+
+      <%- partial('_partial/pagination') %>
+    </section>
+  </div>
+
+  <%- partial('_partial/rail-right') %>
+</div>

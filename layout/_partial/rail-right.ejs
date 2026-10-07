@@ -1,0 +1,18 @@
+<%
+  var rail = theme.rail || {};
+  if (!rail.enable) return;
+  var right = rail.right || {};
+  if (right.enable === false) return;
+%>
+<aside class="rail rail-right" aria-label="文章信息">
+  <div class="rail-sticky">
+    <%- partial('_rail/stats') %>
+    <% if (is_post()) { %>
+      <% /* 文章页：只保留统计 + 目录，让阅读区不被日历/站点信息挤占 */ %>
+      <%- partial('_rail/toc', { post: page }) %>
+    <% } else { %>
+      <%- partial('_rail/calendar') %>
+      <%- partial('_rail/siteinfo') %>
+    <% } %>
+  </div>
+</aside>

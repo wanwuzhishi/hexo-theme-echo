@@ -1,0 +1,51 @@
+<%
+  // 分页组件，基于 hexo-pagination 注入的 page.prev / page.next / page.current
+  if (!page.total || page.total <= 1) return;
+  var base = page.base || '';
+  var current = page.current || 1;
+  var total = page.total || 1;
+
+  function pageUrl(n) {
+    if (n <= 1) return url_for(base || '/');
+    return url_for((base || '/') + 'page/' + n + '/');
+  }
+
+  var start = Math.max(1, current - 2);
+  var end = Math.min(total, start + 4);
+  start = Math.max(1, end - 4);
+%>
+<nav class="pagination" aria-label="分页导航">
+  <% if (current > 1) { %>
+    <a class="page-btn page-prev" href="<%- pageUrl(current - 1) %>" rel="prev">
+      <%- echo_icon('chevron', 15) %> 上一页
+    </a>
+  <% } else { %>
+    <span class="page-btn is-disabled"><%- echo_icon('chevron', 15) %> 上一页</span>
+  <% } %>
+
+  <span class="page-numbers">
+    <% if (start > 1) { %>
+      <a class="page-num" href="<%- pageUrl(1) %>">1</a>
+      <% if (start > 2) { %><span class="page-ellipsis">…</span><% } %>
+    <% } %>
+    <% for (var i = start; i <= end; i++) { %>
+      <% if (i === current) { %>
+        <span class="page-num is-current" aria-current="page"><%= i %></span>
+      <% } else { %>
+        <a class="page-num" href="<%- pageUrl(i) %>"><%= i %></a>
+      <% } %>
+    <% } %>
+    <% if (end < total) { %>
+      <% if (end < total - 1) { %><span class="page-ellipsis">…</span><% } %>
+      <a class="page-num" href="<%- pageUrl(total) %>"><%= total %></a>
+    <% } %>
+  </span>
+
+  <% if (current < total) { %>
+    <a class="page-btn page-next" href="<%- pageUrl(current + 1) %>" rel="next">
+      下一页 <%- echo_icon('chevron', 15) %>
+    </a>
+  <% } else { %>
+    <span class="page-btn is-disabled">下一页 <%- echo_icon('chevron', 15) %></span>
+  <% } %>
+</nav>

@@ -1,0 +1,17 @@
+<%
+  var cfg = theme.sidebar.tags || {};
+  if (!cfg.enable) return;
+  var limit = Number(cfg.limit) || 24;
+  var tags = site.tags.sort('length', -1).limit(limit).toArray();
+  if (!tags.length) return;
+%>
+<section class="widget widget-tags">
+  <h3 class="widget-title"><%- echo_icon('tag', 16) %> 热门标签</h3>
+  <div class="tag-cloud">
+    <% tags.forEach(function (tag) { %>
+      <a class="tag-chip" href="<%- url_for(tag.path) %>">
+        <%= tag.name %><span class="tag-count"><%= tag.length %></span>
+      </a>
+    <% }); %>
+  </div>
+</section>

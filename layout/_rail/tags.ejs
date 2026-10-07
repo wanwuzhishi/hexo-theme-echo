@@ -1,0 +1,17 @@
+<%
+  var cfg = theme.tags || {};
+  if (!cfg.enable) return;
+  var limit = Number(cfg.limit) || 16;
+  var tags = site.tags.sort('length', -1).limit(limit).toArray();
+  if (!tags.length) return;
+%>
+<section class="rail-card">
+  <div class="rail-head">
+    <h3 class="rail-title"><%- echo_icon('tag', 15) %> <%= cfg.title || '标签' %></h3>
+  </div>
+  <div class="tag-cloud">
+    <% tags.forEach(function (tag) { %>
+      <a class="tag-chip" href="<%- url_for(tag.path) %>"><%= tag.name %></a>
+    <% }); %>
+  </div>
+</section>

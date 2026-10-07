@@ -1,0 +1,22 @@
+<%
+  var cfg = theme.category || {};
+  if (!cfg.enable) return;
+  var limit = Number(cfg.limit) || 8;
+  var cats = site.categories.sort('length', -1).limit(limit).toArray();
+  if (!cats.length) return;
+%>
+<section class="rail-card">
+  <div class="rail-head">
+    <h3 class="rail-title"><%- echo_icon('folder-tree', 15) %> <%= cfg.title || '分类' %></h3>
+  </div>
+  <ul class="cat-list">
+    <% cats.forEach(function (cat) { %>
+      <li>
+        <a href="<%- url_for(cat.path) %>">
+          <span class="cat-name" title="<%= cat.name %>"><%= cat.name %></span>
+          <span class="cat-count"><%= cat.length %></span>
+        </a>
+      </li>
+    <% }); %>
+  </ul>
+</section>

@@ -1,0 +1,41 @@
+<%
+  var hcfg = theme.header || {};
+  var raw = page.posts;
+  var posts = Array.isArray(raw) ? raw : (raw && raw.toArray ? raw.toArray() : []);
+  var total = (typeof page.articleTotal === 'number') ? page.articleTotal : posts.length;
+  var currentPage = (page.current || 1);
+  var totalPages = page.total || 1;
+%>
+<div class="page-banner <%= hcfg.banner ? 'has-banner' : '' %>"
+     <% if (hcfg.banner) { %>style="background-image:url('<%- echo_asset(hcfg.banner) %>')"<% } %>>
+  <span class="page-banner-scrim" style="opacity:<%= (hcfg.overlay === undefined) ? 0.72 : Number(hcfg.overlay) %>"></span>
+  <div class="page-banner-inner">
+    <div class="page-banner-card">
+      <h1 class="page-banner-title"><%- echo_icon('file-text', 24) %> 文章</h1>
+      <p class="page-banner-desc">
+        技术笔记、教程与随笔，共 <strong><%= total %></strong> 篇
+        <% if (totalPages > 1) { %>· 第 <%= currentPage %> / <%= totalPages %> 页<% } %>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="layout layout-3col">
+  <%- partial('_partial/rail-left') %>
+
+  <div class="layout-main">
+    <% if (!posts.length) { %>
+      <div class="empty-state"><%- echo_icon('file-text', 30) %><p>还没有文章，去 <code>source/_posts</code> 写一篇吧。</p></div>
+    <% } else { %>
+      <div class="post-grid">
+        <% posts.forEach(function (post) { %>
+          <%- partial('_partial/post-card', { post: post }) %>
+        <% }); %>
+      </div>
+    <% } %>
+
+    <%- partial('_partial/pagination') %>
+  </div>
+
+  <%- partial('_partial/rail-right') %>
+</div>

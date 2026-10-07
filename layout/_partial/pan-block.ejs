@@ -1,0 +1,60 @@
+<%
+  // 资源详情页的网盘下载区块
+  var post = locals.post || page;
+  var res = post.resource || {};
+  var links = Array.isArray(res.links) ? res.links : [];
+  if (!res.enable) return;
+  var notice = theme.resource && theme.resource.notice;
+%>
+<section class="pan-block" id="download">
+  <div class="pan-head">
+    <h2><%- echo_icon('download', 20) %> 网盘下载</h2>
+    <% if (res.password) { %>
+      <span class="pan-master-pwd">统一提取码 <code><%= res.password %></code></span>
+    <% } %>
+  </div>
+
+  <% if (notice) { %>
+    <p class="pan-notice"><%- echo_icon('info', 15) %> <span><%= notice %></span></p>
+  <% } %>
+
+  <% if (links.length) { %>
+    <ul class="pan-list">
+      <% links.forEach(function (link, index) { %>
+        <%
+          var color = echo_pan_color(link.name);
+          var pwd = link.password || res.password || '';
+        %>
+        <li class="pan-item">
+          <div class="pan-item-main">
+            <span class="pan-icon" <%= color ? 'style="background:' + color + '"' : '' %>>
+              <%- echo_icon('folder', 18) %>
+            </span>
+            <div class="pan-item-info">
+              <strong><%= link.name || ('链接 ' + (index + 1)) %></strong>
+              <div class="pan-item-tags">
+                <% if (link.size) { %><span><%= link.size %></span><% } %>
+                <% if (link.note) { %><span><%= link.note %></span><% } %>
+                <% if (pwd && theme.resource && theme.resource.show_password) { %>
+                  <span class="pan-pwd">提取码 <code><%= pwd %></code></span>
+                <% } %>
+              </div>
+            </div>
+          </div>
+          <div class="pan-item-actions">
+            <% if (pwd && theme.resource && theme.resource.show_password) { %>
+              <button type="button" class="btn btn-ghost btn-copy" data-copy="<%= pwd %>">
+                <%- echo_icon('copy', 15) %> 复制提取码
+              </button>
+            <% } %>
+            <a class="btn btn-primary" href="<%- link.url %>" target="_blank" rel="noopener nofollow">
+              <%- echo_icon('external', 15) %> 打开链接
+            </a>
+          </div>
+        </li>
+      <% }); %>
+    </ul>
+  <% } else { %>
+    <p class="pan-empty"><%- echo_icon('info', 15) %> 该资源暂未提供下载链接，请稍后再来或留言催更。</p>
+  <% } %>
+</section>

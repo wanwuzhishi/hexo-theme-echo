@@ -1,0 +1,14 @@
+<%
+  var rail = theme.rail || {};
+  if (!rail.enable) return;
+  var left = rail.left || {};
+  if (left.enable === false) return;
+%>
+<aside class="rail rail-left" aria-label="侧边信息">
+  <div class="rail-sticky">
+    <%- partial('_rail/profile') %>
+    <%- partial('_rail/music') %>
+    <%- partial('_rail/category') %>
+    <%- partial('_rail/tags') %>
+  </div>
+</aside>

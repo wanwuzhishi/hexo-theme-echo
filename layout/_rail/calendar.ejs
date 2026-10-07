@@ -1,0 +1,32 @@
+<%
+  var cfg = theme.calendar || {};
+  if (cfg.enable === false) return;
+  var markSet = {};
+  site.posts.forEach(function (p) {
+    var d = p.date ? (p.date.toDate ? p.date.toDate() : new Date(p.date)) : null;
+    if (d && !Number.isNaN(d.getTime())) {
+      var m = d.getMonth() + 1, day = d.getDate();
+      markSet[d.getFullYear() + '-' + (m < 10 ? '0' + m : m) + '-' + (day < 10 ? '0' + day : day)] = true;
+    }
+  });
+  var marks = Object.keys(markSet);
+  var recent = site.posts.sort('-date').limit(3).toArray();
+%>
+<section class="rail-card calendar-card">
+  <div class="rail-head">
+    <h3 class="rail-title"><%- echo_icon('calendar', 15) %> <%= cfg.title || '日历' %></h3>
+  </div>
+  <div class="calendar" data-calendar data-marks="<%= marks.join(',') %>"></div>
+  <% if (recent.length) { %>
+    <ul class="calendar-recent">
+      <% recent.forEach(function (p) { %>
+        <li>
+          <a href="<%- url_for(p.path) %>">
+            <span class="recent-title"><%= p.title %></span>
+            <span class="recent-date"><%= echo_date(p.date, 'MM-DD') %></span>
+          </a>
+        </li>
+      <% }); %>
+    </ul>
+  <% } %>
+</section>

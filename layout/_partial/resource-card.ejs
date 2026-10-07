@@ -1,0 +1,57 @@
+<%
+  var post = locals.post || locals.item;
+  var type = echo_resource_type(post);
+  var cover = echo_cover(post);
+  var res = post.resource || {};
+  var links = Array.isArray(res.links) ? res.links : [];
+  var fields = (theme.resource && theme.resource.show_fields) || ['version', 'platform', 'size', 'language'];
+  var labels = { version: '版本', platform: '平台', size: '大小', language: '语言', updated: '更新' };
+%>
+<article class="resource-card">
+  <a class="resource-cover" href="<%- url_for(post.path) %>" aria-hidden="true" tabindex="-1">
+    <% if (cover) { %>
+      <img src="<%- cover %>" alt="<%= post.title %>" loading="lazy">
+    <% } else { %>
+      <span class="cover-fallback" data-title="<%= post.title %>">
+        <%- echo_icon(type.icon, 40) %>
+      </span>
+    <% } %>
+    <span class="resource-badge"><%- echo_icon(type.icon, 14) %> <%= type.name %></span>
+    <% if (res.updated) { %>
+      <span class="resource-updated"><%- echo_icon('calendar', 13) %> <%= echo_date(res.updated) %></span>
+    <% } %>
+  </a>
+
+  <div class="resource-body">
+    <h2 class="resource-title">
+      <a href="<%- url_for(post.path) %>"><%= post.title %></a>
+    </h2>
+
+    <p class="resource-excerpt"><%- echo_truncate(post.excerpt || post.content, 90) %></p>
+
+    <div class="resource-fields">
+      <% fields.forEach(function (key) { %>
+        <% if (res[key]) { %>
+          <span class="field-chip"><em><%= labels[key] || key %></em><%= res[key] %></span>
+        <% } %>
+      <% }); %>
+    </div>
+
+    <div class="resource-actions">
+      <% if (links.length) { %>
+        <% var first = links[0]; %>
+        <a class="btn btn-primary" href="<%- first.url %>" target="_blank" rel="noopener nofollow">
+          <%- echo_icon('download', 16) %> <%= first.name || '立即下载' %>
+        </a>
+        <% if (links.length > 1) { %>
+          <a class="btn btn-ghost" href="<%- url_for(post.path) %>">
+            全部 <%= links.length %> 个链接
+          </a>
+        <% } %>
+      <% } else { %>
+        <a class="btn btn-ghost" href="<%- url_for(post.path) %>">查看详情</a>
+      <% } %>
+    </div>
+  </div>
+</article>
+

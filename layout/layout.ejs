@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="<%= config.language || 'zh-CN' %>" data-scheme="<%= theme.color_scheme || 'auto' %>">
+<head>
+  <%- partial('_partial/head') %>
+</head>
+<body class="<%= is_home() ? 'is-home' : '' %> <%= is_post() ? 'is-post' : '' %> <%= is_page() ? 'is-page' : '' %> <%= (is_home() && theme.hero && theme.hero.enable !== false) ? 'has-hero' : '' %>">
+  <a class="skip-link" href="#main">跳到主要内容</a>
+
+  <div class="app-frame">
+    <%- partial('_partial/header') %>
+
+    <main id="main" class="site-main">
+      <%- body %>
+    </main>
+
+    <%- partial('_partial/footer') %>
+  </div>
+
+  <%- partial('_partial/search') %>
+
+  <script>window.ECHO_ROOT = '<%- url_for('/') %>';</script>
+  <script src="<%- url_for('/js/echo.js') %>" defer></script>
+</body>
+</html>

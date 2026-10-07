@@ -1,0 +1,62 @@
+<%
+  var types = page.resourceTypes || echo_resource_types();
+  var active = page.resourceType;
+  var base = page.resourceBase || (config.resources && config.resources.path) || 'resources';
+  var counts = {};
+  types.forEach(function (t) { counts[t.key] = 0; });
+  var totalAll = 0;
+  site.posts.forEach(function (p) {
+    if (p.resource && p.resource.enable) {
+      var k = (p.resource.type || 'other').toString().trim() || 'other';
+      counts[k] = (counts[k] || 0) + 1;
+      totalAll++;
+    }
+  });
+  var hcfg = theme.header || {};
+%>
+<div class="page-banner <%= hcfg.banner ? 'has-banner' : '' %>"
+     <% if (hcfg.banner) { %>style="background-image:url('<%- echo_asset(hcfg.banner) %>')"<% } %>>
+  <span class="page-banner-scrim" style="opacity:<%= (hcfg.overlay === undefined) ? 0.72 : Number(hcfg.overlay) %>"></span>
+  <div class="page-banner-inner">
+    <div class="page-banner-card">
+      <h1 class="page-banner-title">
+        <% if (active) { %><%- echo_icon(active.icon, 24) %> <%= active.name %><% } else { %>资源库<% } %>
+      </h1>
+      <p class="page-banner-desc">
+        <% if (active) { %>共 <strong><%= counts[active.key] || 0 %></strong> 个「<%= active.name %>」资源<% } else { %>影视、游戏、MOD、汉化与软件，共 <strong><%= totalAll %></strong> 个资源<% } %>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="layout layout-3col">
+  <%- partial('_partial/rail-left') %>
+
+  <div class="layout-main">
+    <nav class="resource-filter" aria-label="资源类型筛选">
+      <a class="filter-chip <%= !active ? 'is-active' : '' %>" href="<%- url_for('/' + base + '/') %>">
+        全部<span class="filter-count"><%= totalAll %></span>
+      </a>
+      <% types.forEach(function (type) { %>
+        <a class="filter-chip <%= active && active.key === type.key ? 'is-active' : '' %>"
+           href="<%- url_for('/' + base + '/' + type.key + '/') %>">
+          <%- echo_icon(type.icon, 14) %> <%= type.name %><span class="filter-count"><%= counts[type.key] || 0 %></span>
+        </a>
+      <% }); %>
+    </nav>
+
+    <% if (!page.posts || !page.posts.length) { %>
+      <div class="empty-state"><%- echo_icon('box', 30) %><p>这个分类下还没有资源，敬请期待。</p></div>
+    <% } else { %>
+      <div class="resource-grid">
+        <% page.posts.forEach(function (post) { %>
+          <%- partial('_partial/resource-card', { post: post }) %>
+        <% }); %>
+      </div>
+    <% } %>
+
+    <%- partial('_partial/pagination') %>
+  </div>
+
+  <%- partial('_partial/rail-right') %>
+</div>

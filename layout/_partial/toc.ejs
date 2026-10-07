@@ -1,0 +1,14 @@
+<%
+  var post = locals.post || page;
+  if (!theme.post || !theme.post.toc) return;
+  var toc = toc(post.content, { depth: (theme.post.toc_depth || 3) + 1, class: 'toc', list_number: false });
+  if (!toc || !toc.trim()) return;
+%>
+<aside class="post-toc">
+  <div class="toc-inner">
+    <h3 class="toc-title"><%- echo_icon('layers', 15) %> 目录</h3>
+    <div class="toc-body">
+      <%- toc %>
+    </div>
+  </div>
+</aside>

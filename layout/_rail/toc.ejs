@@ -1,0 +1,18 @@
+<%
+  var post = locals.post || page;
+  var cfg = theme.toc || theme.post || {};
+  if (cfg && cfg.enable === false) return;
+  if (theme.post && theme.post.toc === false) return;
+  if (!post || !post.content) return;
+  var depth = Number(cfg.depth || (theme.post && theme.post.toc_depth) || 3);
+  var tocHtml = toc(post.content, { depth: depth + 1, class: 'toc', list_number: false });
+  if (!tocHtml || !tocHtml.trim()) return;
+%>
+<section class="rail-card toc-card">
+  <div class="rail-head">
+    <h3 class="rail-title"><%- echo_icon('list', 15) %> <%= cfg.title || '目录' %></h3>
+  </div>
+  <nav class="toc-body" aria-label="文章目录">
+    <%- tocHtml %>
+  </nav>
+</section>

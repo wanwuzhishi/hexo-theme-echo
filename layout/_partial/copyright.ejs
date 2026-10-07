@@ -1,0 +1,20 @@
+<%
+  if (!theme.post || !theme.post.copyright) return;
+  var post = locals.post || page;
+%>
+<section class="post-copyright">
+  <div class="copyright-item">
+    <span class="copyright-label">作者</span>
+    <span class="copyright-value"><%= post.author || config.author || config.title %></span>
+  </div>
+  <div class="copyright-item">
+    <span class="copyright-label">链接</span>
+    <span class="copyright-value">
+      <a href="<%- full_url_for(post.path) %>"><%- full_url_for(post.path) %></a>
+    </span>
+  </div>
+  <div class="copyright-item">
+    <span class="copyright-label">版权</span>
+    <span class="copyright-value">本作品采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">BY-NC-SA 4.0</a> 许可协议，转载请注明出处。</span>
+  </div>
+</section>

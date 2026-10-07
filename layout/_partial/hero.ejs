@@ -1,0 +1,51 @@
+<%
+  // 首页顶部大图（Hero）
+  var cfg = theme.hero || {};
+  if (cfg.enable === false) return;
+
+  var idx = theme.index || {};
+  var image = cfg.image || (theme.header && theme.header.banner) || '';
+  var title = cfg.title || idx.banner_title || config.title;
+  var subtitle = cfg.subtitle || idx.banner_subtitle || config.description;
+  var height = cfg.height || '520px';
+  var overlay = (cfg.overlay === undefined) ? 0.42 : Number(cfg.overlay);
+
+  var resBase = (config.resources && config.resources.path) || 'resources';
+  var buttons = (Array.isArray(cfg.buttons) && cfg.buttons.length) ? cfg.buttons : [
+    { text: '进入资源库', url: '/' + resBase + '/', icon: 'layers', primary: true },
+    { text: '浏览归档', url: '/archives/', icon: 'archive' }
+  ];
+
+  var social = (theme.profile && Array.isArray(theme.profile.social)) ? theme.profile.social : [];
+%>
+<section class="home-hero" style="--hero-h: <%= height %>">
+  <span class="home-hero-media"<% if (image) { %> style="background-image:url('<%- echo_asset(image) %>')"<% } %>></span>
+  <span class="home-hero-scrim" style="opacity:<%= overlay %>"></span>
+
+  <div class="home-hero-inner">
+    <h1 class="home-hero-title"><%= title %></h1>
+    <% if (subtitle) { %><p class="home-hero-subtitle"><%= subtitle %></p><% } %>
+
+    <% if (buttons.length) { %>
+      <div class="home-hero-actions">
+        <% buttons.forEach(function (b) { %>
+          <a class="btn <%= b.primary ? 'btn-primary' : 'btn-hero-ghost' %>" href="<%- url_for(b.url) %>">
+            <% if (b.icon) { %><%- echo_icon(b.icon, 17) %><% } %><%= b.text %>
+          </a>
+        <% }); %>
+      </div>
+    <% } %>
+
+    <% if (social.length) { %>
+      <div class="home-hero-social">
+        <% social.forEach(function (item) { %>
+          <a class="hero-social-btn" href="<%- url_for(item.url) %>"
+             title="<%= item.title || item.name %>" aria-label="<%= item.title || item.name %>"
+             <% if (!/^mailto:/.test(item.url)) { %>target="_blank" rel="noopener"<% } %>>
+            <%- echo_icon(item.name, 18) %>
+          </a>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+</section>

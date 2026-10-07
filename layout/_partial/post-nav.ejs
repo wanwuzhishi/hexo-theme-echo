@@ -1,0 +1,23 @@
+<%
+  if (!theme.post || !theme.post.prev_next) return;
+  var post = locals.post || page;
+  var prev = post.prev;
+  var next = post.next;
+  if (!prev && !next) return;
+%>
+<nav class="post-nav" aria-label="上下篇">
+  <% if (prev) { %>
+    <a class="post-nav-item post-nav-prev" href="<%- url_for(prev.path) %>">
+      <span class="post-nav-label"><%- echo_icon('chevron', 14) %> 上一篇</span>
+      <strong><%= prev.title %></strong>
+    </a>
+  <% } else { %>
+    <span class="post-nav-item is-empty"></span>
+  <% } %>
+  <% if (next) { %>
+    <a class="post-nav-item post-nav-next" href="<%- url_for(next.path) %>">
+      <span class="post-nav-label">下一篇 <%- echo_icon('chevron', 14) %></span>
+      <strong><%= next.title %></strong>
+    </a>
+  <% } %>
+</nav>

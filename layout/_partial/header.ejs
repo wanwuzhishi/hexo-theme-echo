@@ -1,0 +1,78 @@
+<%
+  var hcfg = theme.header || {};
+  var banner = hcfg.banner;
+  var overlay = (hcfg.overlay === undefined) ? 0.72 : Number(hcfg.overlay);
+  var menu = theme.menu || {};
+  var primary = theme.menu_primary || [];
+  var current = page.path || '';
+  var keys = Object.keys(menu);
+  var more = keys.filter(function (n) { return primary.indexOf(n) === -1; });
+  // 首页顶部大图时，导航悬浮在大图上，白字透明底
+  var heroOn = is_home() && theme.hero && theme.hero.enable !== false;
+%>
+<header class="site-header <%= (banner || heroOn) ? 'has-banner' : '' %> <%= heroOn ? 'has-hero' : '' %>" id="site-header">
+  <% if (!heroOn) { %>
+  <div class="site-header-bg <%= banner ? 'has-banner' : '' %>"
+       <% if (banner) { %>style="background-image:url('<%- echo_asset(banner) %>')"<% } %>>
+    <span class="site-header-scrim" style="opacity:<%= overlay %>"></span>
+  </div>
+  <% } %>
+
+  <div class="header-inner">
+    <a class="brand" href="<%- url_for('/') %>" aria-label="<%= config.title %> 首页">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor"
+             stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 4h12M6 12h9M6 20h12M6 4v16"/>
+        </svg>
+      </span>
+      <span class="brand-text">
+        <strong><%= config.title %></strong>
+        <small><%= config.subtitle %></small>
+      </span>
+    </a>
+
+    <nav class="site-nav" id="site-nav" aria-label="主导航">
+      <ul class="nav-list">
+        <% keys.forEach(function (name) { %>
+          <% if (primary.indexOf(name) > -1) { %>
+            <li>
+              <a href="<%- url_for(menu[name]) %>"
+                 class="nav-link <%= echo_is_active(current, menu[name]) ? 'is-active' : '' %>"><%= name %></a>
+            </li>
+          <% } %>
+        <% }); %>
+        <% if (more.length) { %>
+          <li class="nav-more">
+            <button type="button" class="nav-link nav-more-toggle" aria-expanded="false" aria-haspopup="true">
+              更多 <%- echo_icon('chevron-down', 15) %>
+            </button>
+            <ul class="nav-dropdown">
+              <% more.forEach(function (name) { %>
+                <li>
+                  <a href="<%- url_for(menu[name]) %>"
+                     class="nav-link <%= echo_is_active(current, menu[name]) ? 'is-active' : '' %>">
+                    <%= name %>
+                  </a>
+                </li>
+              <% }); %>
+            </ul>
+          </li>
+        <% } %>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <button type="button" class="icon-btn" id="search-toggle" aria-label="搜索" title="搜索 (按 / 键)">
+        <%- echo_icon('search', 19) %>
+      </button>
+      <button type="button" class="icon-btn" id="theme-toggle" aria-label="切换深浅色" title="切换深浅色">
+        <span class="icon-sun"><%- echo_icon('sun', 19) %></span>
+        <span class="icon-moon"><%- echo_icon('moon', 19) %></span>
+      </button>
+      <button type="button" class="icon-btn menu-toggle" id="menu-toggle" aria-label="菜单" aria-expanded="false">
+        <%- echo_icon('menu', 21) %>
+      </button>
+    </div>
+  </div>
+</header>

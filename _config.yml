@@ -1,0 +1,247 @@
+# ==========================================================
+#  Echo 主题配置
+# ==========================================================
+
+# --- 外观 ---
+# 默认配色：auto 跟随系统 / dark 深色 / light 浅色
+color_scheme: auto
+# 主题主色（改这一个值，全站按钮、角标、高亮一起变）
+accent: '#5b8cff'
+# 卡片圆角
+radius: 14px
+# 页面最大宽度
+max_width: 1180px
+# 三栏总宽度
+layout_width: 1440px
+# 三栏之间的间距（拉大后中栏更宽）
+layout_gap: 36px
+# 中栏最大宽度
+main_width: 820px
+# 左右侧栏宽度
+rail_width: 240px
+
+# --- 顶部导航 ---
+header:
+  # 顶部横幅背景图，留空则不显示
+  banner: /images/covers/hexo-theme.svg
+  # 背景图遮罩透明度 0~1
+  overlay: 0.72
+
+# --- 首页顶部大图（Hero）---
+hero:
+  # 总开关：false 则首页不显示顶部大图
+  enable: true
+  # 背景图：相对 source 的路径或绝对 URL；留空则回退到 header.banner
+  image: /images/hero.svg
+  # 高度（可写 520px / 60vh 等）
+  height: 520px
+  # 暗色遮罩 0~1，越大越暗、文字越清晰
+  overlay: 0.42
+  # 标题 / 副标题，留空则用 index.banner_title / banner_subtitle，再回退站点标题、描述
+  title: ''
+  subtitle: ''
+  # 大图上的按钮，可增删；primary: true 为实心主按钮
+  buttons:
+    - text: 进入资源库
+      url: /resources/
+      icon: layers
+      primary: true
+    - text: 浏览归档
+      url: /archives/
+      icon: archive
+      primary: false
+
+# --- 菜单 ---
+menu:
+  首页: /
+  文章: /articles/
+  资源库: /resources/
+  影视: /resources/movie/
+  游戏: /resources/game/
+  MOD: /resources/mod/
+  汉化: /resources/translation/
+  归档: /archives/
+  关于: /about/
+
+menu_primary:
+  - 首页
+  - 文章
+  - 资源库
+  - 归档
+
+# --- 首页 ---
+index:
+  banner: true
+  banner_title: Echo
+  banner_subtitle: 影视 · 游戏 · MOD · 汉化 · 网络编程
+  show_resource_entries: true
+  post_per_page: 12
+
+# ==========================================================
+#  三栏布局
+# ==========================================================
+# 左栏：个人名片 / 音乐 / 分类 / 标签
+# 右栏：统计 / 目录
+rail:
+  # 全局总开关
+  enable: true
+  left:
+    enable: true
+    width: 260px
+  right:
+    enable: true
+    width: 260px
+
+# --- 左栏组件 ---
+# 个人名片
+profile:
+  enable: true
+  avatar: /images/avatar.svg
+  name: Echo
+  bio: 分享影视、游戏与各类资源，也折腾博客和 Mod 汉化。
+  # 社交图标，name 用于匹配内置图标：github / bilibili / telegram / mail / rss / link
+  social:
+    - name: github
+      url: https://github.com/
+      title: GitHub
+    - name: bilibili
+      url: https://space.bilibili.com/
+      title: 哔哩哔哩
+    - name: telegram
+      url: https://t.me/
+      title: Telegram
+    - name: mail
+      url: mailto:you@example.com
+      title: 邮箱
+    - name: rss
+      url: /atom.xml
+      title: RSS
+
+# 音乐播放器
+music:
+  enable: true
+  title: 音乐
+  # 单曲：填写音频直链（mp3 / m4a）；留空则播放器按钮不可用
+  src: ''
+  # 多曲播放列表（可选，填了就优先用它）
+  #playlist:
+  #  - name: 曲目一
+  #    artist: 歌手
+  #    src: https://example.com/a.mp3
+  #    cover: /images/covers/hexo-theme.svg
+  name: 示例曲目
+  artist: 未知艺术家
+  cover: /images/covers/hexo-theme.svg
+
+# 分类（左栏）
+category:
+  enable: true
+  title: 分类
+  limit: 8
+
+# 标签（左栏）
+tags:
+  enable: true
+  title: 标签
+  limit: 16
+
+# --- 右栏组件 ---
+# 站点统计
+stats:
+  enable: true
+  title: 统计
+  show:
+    - posts      # 文章
+    - categories # 分类
+    - tags       # 标签
+    - words      # 总字数
+    - runtime    # 运行时长
+    - updated    # 最后活动
+  # 建站日期，用于计算运行时长
+  since: 2024-01-01
+  words_unit: 字
+
+# 文章目录
+toc:
+  enable: true
+  title: 目录
+  depth: 3
+
+# --- 资源板块 ---
+resource:
+  show_fields:
+    - version
+    - platform
+    - size
+    - language
+  show_password: true
+  cover_ratio: '16 / 9'
+  notice: '资源仅供学习交流，请在下载后 24 小时内删除。'
+  pan_colors:
+    百度网盘: '#2932e1'
+    阿里云盘: '#ff6a00'
+    夸克网盘: '#2f7dff'
+    天翼云盘: '#0090ff'
+    123云盘: '#1677ff'
+    迅雷云盘: '#2f6bff'
+    蓝奏云: '#3ba0ff'
+    微云: '#12b7f5'
+    奶牛快传: '#ffb02e'
+    Google Drive: '#34a853'
+    OneDrive: '#0f6cbd'
+    Mega: '#d9272e'
+    磁力链接: '#7a5cff'
+    BT 种子: '#f59e0b'
+
+# --- 文章页 ---
+post:
+  toc: true
+  toc_depth: 3
+  copyright: true
+  reward: false
+  updated: true
+  words_per_minute: 300
+  prev_next: true
+  # 正文前的简介（取自 description 或摘要）
+  intro: true
+
+# --- 页脚 ---
+footer:
+  since: 2024
+  powered: true
+  beian:
+    enable: false
+    text:
+    link: https://beian.miit.gov.cn/
+
+# --- 评论 ---
+comments:
+  enable: false
+
+# --- 代码高亮 ---
+code:
+  # 代码块窗口风格：mac 三色圆点 / plain 纯色 / none
+  style: mac
+  copy: true
+  line_number: true
+  # 语言角标显示
+  lang_label: true
+
+# --- 动画 ---
+motion:
+  enable: true
+# --- 右栏：日历 ---
+# 注意：文章页（含资源详情页）会自动隐藏日历与站点信息，只保留统计 + 目录
+calendar:
+  enable: true
+  title: 日历
+
+# --- 右栏：站点信息 ---
+siteinfo:
+  enable: true
+  title: 站点信息
+  build: Hexo
+  version: Echo 1.0
+  license: CC BY-NC-SA 4.0
+  # 留空则使用站点 url
+  domain: ''

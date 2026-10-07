@@ -1,0 +1,31 @@
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <strong><%= config.title %></strong>
+      <p><%= config.description %></p>
+    </div>
+
+    <div class="footer-links">
+      <%
+        var menu = theme.menu || {};
+      %>
+      <% Object.keys(menu).slice(0, 8).forEach(function (name) { %>
+        <a href="<%- url_for(menu[name]) %>"><%= name %></a>
+      <% }); %>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>© <%= theme.footer && theme.footer.since ? theme.footer.since + ' - ' : '' %><%= date(new Date(), 'YYYY') %> <%= config.author || config.title %></span>
+    <% if (theme.footer && theme.footer.beian && theme.footer.beian.enable && theme.footer.beian.text) { %>
+      <a href="<%= theme.footer.beian.link || '#' %>" target="_blank" rel="noopener"><%= theme.footer.beian.text %></a>
+    <% } %>
+    <% if (theme.footer && theme.footer.powered) { %>
+      <span>由 <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 与 <a href="https://github.com/" target="_blank" rel="noopener">Echo 主题</a> 驱动</span>
+    <% } %>
+  </div>
+</footer>
+
+<button type="button" class="back-to-top" id="back-to-top" aria-label="回到顶部" title="回到顶部">
+  <%- echo_icon('chevron', 18) %>
+</button>

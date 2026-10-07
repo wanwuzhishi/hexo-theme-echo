@@ -1,0 +1,38 @@
+<%
+  if (!theme.sidebar.stats || !theme.sidebar.stats.enable) return;
+  var types = echo_resource_types();
+  var counts = {};
+  types.forEach(function (t) { counts[t.key] = 0; });
+  var resourceCount = 0;
+  site.posts.forEach(function (post) {
+    if (post.resource && post.resource.enable) {
+      resourceCount++;
+      var key = (post.resource.type || 'other').toString().trim() || 'other';
+      counts[key] = (counts[key] || 0) + 1;
+    }
+  });
+  var base = (config.resources && config.resources.path) || 'resources';
+%>
+<section class="widget widget-stats">
+  <h3 class="widget-title"><%- echo_icon('layers', 16) %> 资源统计</h3>
+  <div class="stats-grid">
+    <div class="stat-cell">
+      <strong><%= site.posts.length %></strong>
+      <span>篇文章</span>
+    </div>
+    <div class="stat-cell">
+      <strong><%= resourceCount %></strong>
+      <span>个资源</span>
+    </div>
+  </div>
+  <ul class="stats-list">
+    <% types.forEach(function (type) { %>
+      <li>
+        <a href="<%- url_for('/' + base + '/' + type.key + '/') %>">
+          <span class="stat-name"><%- echo_icon(type.icon, 15) %> <%= type.name %></span>
+          <span class="stat-count"><%= counts[type.key] || 0 %></span>
+        </a>
+      </li>
+    <% }); %>
+  </ul>
+</section>

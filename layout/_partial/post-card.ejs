@@ -1,0 +1,79 @@
+<%
+  // 通用文章卡片：post 为文章对象，compact 为紧凑模式
+  var post = locals.post || locals.item;
+  var compact = locals.compact;
+  var cover = echo_cover(post);
+  var cats = echo_categories(post, 2);
+  var tags = echo_tags(post, compact ? 2 : 3);
+  var isResource = post.resource && post.resource.enable;
+  var type = isResource ? echo_resource_type(post) : null;
+%>
+<article class="post-card <%= compact ? 'is-compact' : '' %> <%= isResource ? 'is-resource' : '' %>">
+  <a class="card-cover" href="<%- url_for(post.path) %>" aria-hidden="true" tabindex="-1">
+    <% if (cover) { %>
+      <img src="<%- cover %>" alt="<%= post.title %>" loading="lazy">
+    <% } else { %>
+      <span class="cover-fallback" data-title="<%= post.title %>">
+        <%- echo_icon(isResource ? type.icon : 'layers', 34) %>
+      </span>
+    <% } %>
+    <% if (isResource) { %>
+      <span class="card-badge"><%- echo_icon(type.icon, 14) %> <%= type.name %></span>
+    <% } %>
+  </a>
+
+  <div class="card-body">
+    <div class="card-meta">
+      <time datetime="<%- post.date.toISOString() %>"><%- echo_date(post.date) %></time>
+      <% if (cats.length) { %>
+        <span class="meta-sep">·</span>
+        <% cats.forEach(function (cat, i) { %>
+          <a href="<%- url_for(cat.path) %>"><%= cat.name %></a><%= i < cats.length - 1 ? '、' : '' %>
+        <% }); %>
+      <% } %>
+    </div>
+
+    <h2 class="card-title">
+      <a href="<%- url_for(post.path) %>"><%= post.title %></a>
+    </h2>
+
+    <p class="card-excerpt">
+      <%- echo_truncate(post.excerpt || post.content, compact ? 70 : 110) %>
+    </p>
+
+    <% if (isResource) { %>
+      <div class="card-fields">
+        <%
+          var fields = (theme.resource && theme.resource.show_fields) || ['version', 'platform', 'size', 'language'];
+          var labels = { version: '版本', platform: '平台', size: '大小', language: '语言' };
+          var shown = 0;
+        %>
+        <% fields.forEach(function (key) { %>
+          <% if (post.resource[key] && shown < 3) { shown++; %>
+            <span class="field-chip"><em><%= labels[key] || key %></em><%= post.resource[key] %></span>
+          <% } %>
+        <% }); %>
+        <% if (!shown) { %>
+          <span class="field-chip"><em>资源</em>查看详情</span>
+        <% } %>
+      </div>
+    <% } %>
+
+    <div class="card-footer">
+      <% if (tags.length) { %>
+        <span class="card-tags">
+          <% tags.forEach(function (tag) { %>
+            <a class="card-tag" href="<%- url_for(tag.path) %>">#<%= tag.name %></a>
+          <% }); %>
+        </span>
+      <% } else { %>
+        <span class="read-more">
+          <%= isResource ? '查看资源' : '阅读全文' %> <%- echo_icon('chevron', 15) %>
+        </span>
+      <% } %>
+      <span class="card-stats">
+        <span><%- echo_icon('clock', 14) %><%= echo_reading_time(post.content) %> min</span>
+      </span>
+    </div>
+  </div>
+</article>
