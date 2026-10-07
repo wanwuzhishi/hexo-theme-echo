@@ -86,7 +86,7 @@ rail:
 # 个人名片
 profile:
   enable: true
-  avatar: /images/avatar.svg
+  avatar: /images/avatar.jpg
   name: Echo
   bio: 分享影视、游戏与各类资源，也折腾博客和 Mod 汉化。
   # 社交图标，name 用于匹配内置图标：github / bilibili / telegram / mail / rss / link
