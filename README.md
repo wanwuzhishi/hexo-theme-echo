@@ -172,14 +172,10 @@ rail:
 toc:
   enable: true
   depth: 3
-
-code:
-  style: mac              # mac / plain / none
-  copy: true
-  line_number: true
 ```
 
-> 提示：`max_width` 已被 `layout_width` 覆盖，改它无效；侧栏宽度以 `rail.left.width` / `rail.right.width` 为准。
+> 提示：侧栏宽度以 `rail.left.width` / `rail.right.width` 为准（全局 `rail_width` 只作默认值）；
+> 代码块样式（mac 三色圆点窗口、复制按钮、语言角标）由主题内置，无需配置。
 
 ---
 
@@ -215,8 +211,8 @@ themes/echo/
 ## 已知事项
 
 - 字体走 Google Fonts CDN，国内环境建议自托管后替换 `head.ejs` 里的引用
-- `layout/_widget/` 与 `layout/_partial/sidebar.ejs` 是早期版本遗留，当前未被引用
 - 音乐播放器未配置音源时整卡不渲染（不会出现按钮全灰的假播放器）
+- 未内置评论服务，需要的话在 `layout/_partial/` 下加组件并在 `post.ejs` 引入
 
 ---
 

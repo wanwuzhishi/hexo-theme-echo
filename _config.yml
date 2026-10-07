@@ -9,8 +9,6 @@ color_scheme: auto
 accent: '#5b8cff'
 # 卡片圆角
 radius: 14px
-# 页面最大宽度
-max_width: 1180px
 # 三栏总宽度
 layout_width: 1440px
 # 三栏之间的间距（拉大后中栏更宽）
@@ -159,7 +157,6 @@ stats:
     - updated    # 最后活动
   # 建站日期，用于计算运行时长
   since: 2024-01-01
-  words_unit: 字
 
 # 文章目录
 toc:
@@ -175,7 +172,6 @@ resource:
     - size
     - language
   show_password: true
-  cover_ratio: '16 / 9'
   notice: '资源仅供学习交流，请在下载后 24 小时内删除。'
   pan_colors:
     百度网盘: '#2932e1'
@@ -198,7 +194,6 @@ post:
   toc: true
   toc_depth: 3
   copyright: true
-  reward: false
   updated: true
   words_per_minute: 300
   prev_next: true
@@ -214,22 +209,6 @@ footer:
     text:
     link: https://beian.miit.gov.cn/
 
-# --- 评论 ---
-comments:
-  enable: false
-
-# --- 代码高亮 ---
-code:
-  # 代码块窗口风格：mac 三色圆点 / plain 纯色 / none
-  style: mac
-  copy: true
-  line_number: true
-  # 语言角标显示
-  lang_label: true
-
-# --- 动画 ---
-motion:
-  enable: true
 # --- 右栏：日历 ---
 # 注意：文章页（含资源详情页）会自动隐藏日历与站点信息，只保留统计 + 目录
 calendar:

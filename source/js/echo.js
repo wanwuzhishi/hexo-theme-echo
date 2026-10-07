@@ -60,8 +60,7 @@
     });
   });
 
-  /* ---------- Scroll progress + back to top ---------- */
-  var progress = $('#scroll-progress');
+  /* ---------- 回到顶部 + 首页导航吸顶切换 ---------- */
   var backTop = $('#back-to-top');
   var siteHeader = $('#site-header');
   var homeHero = $('.home-hero');
@@ -78,8 +77,6 @@
 
   function onScroll() {
     var top = window.scrollY || window.pageYOffset;
-    var height = document.documentElement.scrollHeight - window.innerHeight;
-    if (progress) progress.style.width = (height > 0 ? (top / height) * 100 : 0) + '%';
     if (backTop) backTop.classList.toggle('is-visible', top > 480);
     updateHeader(top);
     ticking = false;
@@ -102,7 +99,7 @@
   }
 
   /* ---------- Reveal on scroll ---------- */
-  var revealTargets = $$('.post-card, .resource-card, .entry-card, .widget, .archive-year');
+  var revealTargets = $$('.post-card, .resource-card, .entry-card, .archive-year');
   if ('IntersectionObserver' in window && revealTargets.length) {
     revealTargets.forEach(function (el, i) {
       el.classList.add('reveal');
@@ -241,7 +238,7 @@
     var nextBtn = $('#music-next', musicCard);
     var shuffleBtn = $('#music-shuffle', musicCard);
     var repeatBtn = $('#music-repeat', musicCard);
-    var progress = $('#music-progress', musicCard);
+    var musicProgress = $('#music-progress', musicCard);
     var progressFill = $('#music-progress-fill', musicCard);
     var currentEl = $('#music-current', musicCard);
     var durationEl = $('#music-duration', musicCard);
@@ -285,13 +282,13 @@
     });
     audio.addEventListener('loadedmetadata', function () {
       durationEl && (durationEl.textContent = fmt(audio.duration));
-      if (progress) progress.setAttribute('aria-valuemax', String(Math.round(audio.duration) || 0));
+      if (musicProgress) musicProgress.setAttribute('aria-valuemax', String(Math.round(audio.duration) || 0));
     });
     audio.addEventListener('timeupdate', function () {
       var pct = audio.duration ? (audio.currentTime / audio.duration) * 100 : 0;
       progressFill && (progressFill.style.width = pct + '%');
       currentEl && (currentEl.textContent = fmt(audio.currentTime));
-      if (progress) progress.setAttribute('aria-valuenow', String(Math.round(pct)));
+      if (musicProgress) musicProgress.setAttribute('aria-valuenow', String(Math.round(pct)));
     });
     audio.addEventListener('ended', function () {
       if (repeatOne) { audio.currentTime = 0; audio.play().catch(function () {}); return; }
@@ -319,14 +316,14 @@
 
     function seekFromEvent(e) {
       if (!audio.duration) return;
-      var rect = progress.getBoundingClientRect();
+      var rect = musicProgress.getBoundingClientRect();
       var x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
       var ratio = Math.min(1, Math.max(0, x / rect.width));
       audio.currentTime = ratio * audio.duration;
     }
-    if (progress) {
-      progress.addEventListener('click', seekFromEvent);
-      progress.addEventListener('keydown', function (e) {
+    if (musicProgress) {
+      musicProgress.addEventListener('click', seekFromEvent);
+      musicProgress.addEventListener('keydown', function (e) {
         if (!audio.duration) return;
         if (e.key === 'ArrowRight') { audio.currentTime = Math.min(audio.duration, audio.currentTime + 5); e.preventDefault(); }
         if (e.key === 'ArrowLeft') { audio.currentTime = Math.max(0, audio.currentTime - 5); e.preventDefault(); }

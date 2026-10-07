@@ -181,12 +181,6 @@ function siteWordCount(posts) {
   return total;
 }
 
-// 文章总数
-function sitePostCount(posts) {
-  var list = posts || getSite().posts;
-  return (list && list.length) || 0;
-}
-
 // 运行时长：返回 { days, text }
 function siteRuntime(since) {
   var start = since ? new Date(since) : new Date();
@@ -212,43 +206,9 @@ function lastActivity(posts) {
   return formatDate(date, 'YYYY-MM-DD');
 }
 
-// 分类计数
-function siteCategoryCount() {
-  var src = getSite();
-  return (src.categories && src.categories.length) || 0;
-}
-
-// 标签计数
-function siteTagCount() {
-  var src = getSite();
-  return (src.tags && src.tags.length) || 0;
-}
-
-// 代码语言显示名
-var LANG_LABELS = {
-  js: 'JavaScript', javascript: 'JavaScript', ts: 'TypeScript', typescript: 'TypeScript',
-  py: 'Python', python: 'Python', rb: 'Ruby', go: 'Go', rs: 'Rust', java: 'Java',
-  c: 'C', cpp: 'C++', cs: 'C#', php: 'PHP', swift: 'Swift', kt: 'Kotlin',
-  sh: 'Shell', bash: 'Bash', zsh: 'Zsh', powershell: 'PowerShell', ps1: 'PowerShell',
-  yml: 'YAML', yaml: 'YAML', json: 'JSON', toml: 'TOML', ini: 'INI', xml: 'XML',
-  html: 'HTML', css: 'CSS', scss: 'SCSS', less: 'Less', vue: 'Vue', jsx: 'JSX', tsx: 'TSX',
-  md: 'Markdown', markdown: 'Markdown', sql: 'SQL', diff: 'Diff', dockerfile: 'Dockerfile',
-  nginx: 'Nginx', plaintext: 'Plaintext', text: 'Plaintext', ejs: 'EJS'
-};
-
-function langLabel(name) {
-  if (!name) return 'Plaintext';
-  var key = String(name).toLowerCase();
-  return LANG_LABELS[key] || key.toUpperCase();
-}
-
 hexo.extend.helper.register('echo_site_words', siteWordCount);
-hexo.extend.helper.register('echo_site_posts', sitePostCount);
 hexo.extend.helper.register('echo_site_runtime', siteRuntime);
 hexo.extend.helper.register('echo_last_activity', lastActivity);
-hexo.extend.helper.register('echo_category_count', siteCategoryCount);
-hexo.extend.helper.register('echo_tag_count', siteTagCount);
-hexo.extend.helper.register('echo_lang_label', langLabel);
 hexo.extend.helper.register('echo_icon', svgIcon);
 hexo.extend.helper.register('echo_truncate', truncate);
 hexo.extend.helper.register('echo_word_count', wordCount);
@@ -278,7 +238,3 @@ hexo.extend.helper.register('echo_tags', function (post, limit) {
   const list = post.tags.toArray().map(t => ({ name: t.name, path: t.path }));
   return limit ? list.slice(0, Number(limit)) : list;
 });
-
-
-
-

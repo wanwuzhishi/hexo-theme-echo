@@ -22,7 +22,6 @@
   --shadow-md: 0 4px 12px rgba(20, 25, 45, .07), 0 12px 32px rgba(20, 25, 45, .06);
   --shadow-lg: 0 12px 32px rgba(20, 25, 45, .12), 0 32px 64px rgba(20, 25, 45, .08);
 
-  --ok: #16a34a;
   --warn: #f59e0b;
 
   --font-sans: 'Inter', 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -297,8 +296,6 @@ code, kbd, pre { font-family: var(--font-mono); }
   transform: translateY(-1px);
 }
 
-.btn-lg { padding: 12px 22px; font-size: 15px; border-radius: 12px; }
-
 .icon-btn {
   display: inline-flex;
   align-items: center;
@@ -482,16 +479,6 @@ code, kbd, pre { font-family: var(--font-mono); }
 
 .menu-toggle { display: none; }
 
-.scroll-progress {
-  position: absolute;
-  left: 0;
-  bottom: -1px;
-  height: 2px;
-  width: 0;
-  background: linear-gradient(90deg, var(--accent), #8f6bff);
-  transition: width .1s linear;
-}
-
 @media (max-width: 900px) {
   .menu-toggle { display: inline-flex; }
   .site-nav {
@@ -584,12 +571,7 @@ code, kbd, pre { font-family: var(--font-mono); }
 }
 .section-more:hover { color: var(--accent); gap: 8px; }
 
-/* ---------- Resource entries ---------- */
-.resource-entries {
-  max-width: var(--max-width);
-  margin: 0 auto;
-  padding: 40px 24px 4px;
-}
+/* ---------- 首页资源分类入口 ---------- */
 .entry-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(min(200px, 100%), 1fr));
@@ -628,7 +610,6 @@ code, kbd, pre { font-family: var(--font-mono); }
 
 @media (max-width: 640px) {
   .hero { padding: 44px 16px 40px; }
-  .resource-entries { padding: 28px 16px 0; }
 }
 
 /* ==========================================================================
@@ -1243,7 +1224,6 @@ figure.highlight .code .line { padding-left: 0; }
 .post-content th { background: var(--bg-sunken); font-weight: 600; }
 .post-content tr:last-child td { border-bottom: none; }
 
-.post-content .video-container,
 .post-content iframe { max-width: 100%; border-radius: 12px; }
 
 /* ---------- highlight.js theme (github-dark) ---------- */
@@ -1439,13 +1419,6 @@ figure.highlight:hover > .code-copy { opacity: 1; }
   transition: all .18s var(--ease);
 }
 .tag-chip:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
-.tag-count {
-  padding: 0 6px;
-  border-radius: 999px;
-  background: var(--bg-sunken);
-  font-size: 11px;
-  color: var(--text-mute);
-}
 
 .post-copyright {
   margin: 26px 0 0;
