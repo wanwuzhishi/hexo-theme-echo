@@ -861,6 +861,18 @@ code, kbd, pre { font-family: var(--font-mono); }
   border-bottom: 1px solid var(--border);
 }
 .page-banner.has-banner { border-bottom: none; }
+/* 浅色主题下横幅是深色大图，与浅色正文之间会形成硬边；
+   在底部铺一段渐隐，让横幅平滑溶进页面底色（深色主题下自动几乎不可见）。 */
+.page-banner.has-banner::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--banner-fade, 104px);
+  background: linear-gradient(180deg, transparent, var(--bg) 94%);
+  pointer-events: none;
+}
 .page-banner-scrim {
   position: absolute;
   inset: 0;
@@ -869,11 +881,16 @@ code, kbd, pre { font-family: var(--font-mono); }
 }
 .page-banner-inner {
   position: relative;
+  z-index: 1;
   max-width: var(--layout-max);
   margin: 0 auto;
   padding: 30px 24px 34px;
 }
+/* 有横幅时给底部渐隐留出空间，避免卡片被渐变压住 */
+.page-banner.has-banner .page-banner-inner { padding-bottom: calc(34px + var(--banner-fade, 104px) * .55); }
 .page-banner-card {
+  position: relative;
+  z-index: 1;
   padding: 22px 24px;
   border-radius: var(--radius);
   background: color-mix(in srgb, var(--bg-elev) 82%, transparent);
