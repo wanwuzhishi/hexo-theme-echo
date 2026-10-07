@@ -22,6 +22,8 @@ accent: '#5b8cff'
 #   warn               警告色（默认橙）
 colors:
   accent: '#5b8cff'
+  # 浅色主题下顶部横幅的浅蓝（不随 accent 变化，保证「浅蓝」观感稳定）
+  banner_light: '#dbeafe'
   # secondary: '#8f6bff'
   # accent-glow: 'rgba(91, 140, 255, .3)'
 

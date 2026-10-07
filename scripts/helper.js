@@ -239,6 +239,13 @@ function themeColorVars() {
   // 品牌位渐变的第二色也跟随主色
   derived['brand-gradient'] = 'linear-gradient(135deg, ' + derived.accent + ', ' + derived.secondary + ')';
 
+  // 浅色主题下顶部横幅的浅蓝（不随 accent 变浅/变深，保证「浅蓝」这个观感稳定）
+  const bannerLight = parseHex(colors.banner_light) || [219, 234, 254];
+  derived['banner-light'] = toHex(bannerLight);
+  derived['banner-light-deep'] = toHex(parseHex(colors.banner_light_deep) || shade(bannerLight, -0.12));
+  derived['banner-light-soft'] = rgba(bannerLight, 0.72);
+  derived['banner-light-line'] = toHex(shade(bannerLight, -0.26));
+
   // 允许配置里直接覆盖任意派生值，也允许新增自定义变量
   const extra = {};
   Object.keys(colors).forEach(key => {

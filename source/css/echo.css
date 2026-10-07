@@ -926,62 +926,68 @@ code, kbd, pre { font-family: var(--font-mono); }
 
 /* ==========================================================================
    浅色主题下的横幅配色
-   深色大图压在浅色页面上会显得突兀，这里让浅色主题改用「主色浅底」，
-   颜色全部由 --accent / --secondary 派生，换主色时横幅自动跟着协调。
-   深色主题不受影响（见下方 data-theme='dark' 之外的默认规则）。
+   浅色页面里深色大图 + 深色蒙层会又闷又割裂，所以浅色主题整套换成
+   「明亮浅蓝」配色：取消大图与蒙层，底色用 --banner-light 浅蓝，
+   文字/图标用高对比深色，边界靠细描边而不是重投影。
    ========================================================================== */
 
-/* --- 1. 顶部导航横幅：换成主色浅底渐变 --- */
+/* --- 1. 顶部导航横幅：明亮浅蓝 --- */
 [data-theme='light'] .site-header-bg,
 [data-theme='light'] .page-banner {
   background-image: none !important;
 }
+/* 关掉深色蒙层与深色叠加层——它们是浅色下发灰看不清的元凶 */
+[data-theme='light'] .site-header-bg.has-banner::after,
+[data-theme='light'] .site-header-scrim { display: none; }
 [data-theme='light'] .site-header-bg {
   background:
-    radial-gradient(760px 300px at 16% -20%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 70%),
-    radial-gradient(680px 280px at 92% 0%, color-mix(in srgb, var(--secondary) 20%, transparent), transparent 72%),
-    linear-gradient(180deg, color-mix(in srgb, var(--accent) 10%, var(--bg-elev)), var(--bg-elev));
+    radial-gradient(760px 340px at 12% -40%, color-mix(in srgb, #fff 55%, transparent), transparent 70%),
+    linear-gradient(180deg, var(--banner-light) 0%, color-mix(in srgb, var(--banner-light) 55%, #fff) 100%);
 }
-/* 顶部横幅上的文字改回深色，保证浅底上的可读性 */
-[data-theme='light'] .site-header.has-banner .brand-text strong { color: var(--text); }
-[data-theme='light'] .site-header.has-banner .brand-text small { color: var(--text-mute); }
-[data-theme='light'] .site-header.has-banner .nav-link { color: var(--text-soft); }
+/* 浅蓝底上用常规描边收边 */
+[data-theme='light'] .site-header.has-banner {
+  border-bottom: 1px solid var(--banner-light-line);
+}
+/* 文字与图标：高对比深色（在浅蓝上清晰可读） */
+[data-theme='light'] .site-header.has-banner .brand-text strong { color: #0f172a; }
+[data-theme='light'] .site-header.has-banner .brand-text small { color: #475569; }
+[data-theme='light'] .site-header.has-banner .nav-link { color: #1e293b; }
 [data-theme='light'] .site-header.has-banner .nav-link:hover,
 [data-theme='light'] .site-header.has-banner .nav-link.is-active {
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
-  color: var(--accent-text);
+  background: color-mix(in srgb, #fff 62%, transparent);
+  color: #0f172a;
 }
-[data-theme='light'] .site-header.has-banner .icon-btn { color: var(--text-soft); }
+[data-theme='light'] .site-header.has-banner .icon-btn { color: #334155; }
 [data-theme='light'] .site-header.has-banner .icon-btn:hover {
-  background: color-mix(in srgb, var(--accent) 14%, transparent);
-  color: var(--accent-text);
+  background: color-mix(in srgb, #fff 62%, transparent);
+  color: #0f172a;
 }
-/* 浅底上不需要重投影 */
 [data-theme='light'] .site-header.has-banner .brand-mark { box-shadow: var(--shadow-sm); }
-/* 浅色下遮罩会压灰底色，直接去掉 */
-[data-theme='light'] .site-header-scrim { background: none; }
 
-/* --- 2. 内页横幅：主色浅底 + 细描边 --- */
+/* --- 2. 内页横幅：明亮浅蓝 + 白卡片 --- */
 [data-theme='light'] .page-banner {
   background:
-    radial-gradient(820px 320px at 12% -18%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%),
-    linear-gradient(160deg, color-mix(in srgb, var(--accent) 7%, var(--bg-elev)), var(--bg-elev));
-  border-bottom: 1px solid var(--border);
+    radial-gradient(900px 360px at 8% -30%, color-mix(in srgb, #fff 50%, transparent), transparent 72%),
+    linear-gradient(165deg, var(--banner-light) 0%, color-mix(in srgb, var(--banner-light) 45%, #fff) 100%);
+  border-bottom: 1px solid var(--banner-light-line);
 }
 [data-theme='light'] .page-banner-scrim { display: none; }
-[data-theme='light'] .page-banner-card {
-  background: color-mix(in srgb, var(--bg-elev) 86%, transparent);
-  border: 1px solid color-mix(in srgb, var(--accent) 16%, var(--border));
-  box-shadow: var(--shadow-sm);
-}
-[data-theme='light'] .page-banner-title,
-[data-theme='light'] .page-banner-desc { color: var(--text); }
-[data-theme='light'] .page-banner-desc { color: var(--text-soft); }
-[data-theme='light'] .page-banner-desc strong { color: var(--accent-text); }
-[data-theme='light'] .page-banner-title .icon { color: var(--accent-text); }
-/* 浅色主题横幅本身就是浅底，底部渐隐不再需要，收回为 0 省出留白 */
+/* 横幅本身已是浅色，底部渐隐不需要了 */
 [data-theme='light'] .page-banner.has-banner::after { display: none; }
 [data-theme='light'] .page-banner.has-banner .page-banner-inner { padding-bottom: 34px; }
+/* 卡片实心白 + 浅蓝描边 */
+[data-theme='light'] .page-banner-card {
+  background: #fff;
+  border: 1px solid var(--banner-light-line);
+  box-shadow: 0 2px 12px color-mix(in srgb, #0f172a 8%, transparent);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+[data-theme='light'] .page-banner-title { color: #0f172a; }
+[data-theme='light'] .page-banner-title .icon { color: var(--accent-text); }
+[data-theme='light'] .page-banner-desc { color: #475569; }
+[data-theme='light'] .page-banner-desc strong { color: var(--accent-text); }
+
 
 /* ==========================================================================
    Post single
