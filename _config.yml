@@ -114,10 +114,25 @@ rail:
 # 个人名片
 profile:
   enable: true
+  # 卡片顶部标题；留空则不显示这一行
+  title: ''
+  # 标题左侧图标（内置图标名，如 user / info / star）
+  title_icon: user
   avatar: /images/avatar.jpg
+  # 头像尺寸：数字（按 px）或带单位字符串，如 72 / '72px' / '5rem'
+  avatar_size: 72
+  # 头像右下角角标文字，留空则不显示（如 '博主'、'V'）
+  badge: ''
+  badge_title: ''
   name: Echo
+  # 简介；设为 false 可整段隐藏
   bio: 分享影视、游戏与各类资源，也折腾博客和 Mod 汉化。
+  # 社交区小标题，留空则不显示
+  social_title: '找到我'
+  # 社交按钮里图标的字号（px），按钮尺寸会跟着自适应
+  icon_size: 19
   # 社交图标，name 用于匹配内置图标：github / bilibili / telegram / mail / rss / link
+  # 也支持：weibo / qq / twitter / x / youtube / user / comment 等
   social:
     - name: github
       url: https://github.com/

@@ -949,10 +949,12 @@ code, kbd, pre { font-family: var(--font-mono); }
 [data-theme-hint='light'] .site-header-bg.has-banner::after,
 [data-theme-hint='light'] .site-header-scrim { display: none; }
 [data-theme='light'] .site-header-bg,
-[data-theme-hint='light'] .site-header-bg {
+[data-theme='light'] .site-header-bg.has-banner,
+[data-theme-hint='light'] .site-header-bg,
+[data-theme-hint='light'] .site-header-bg.has-banner {
   background:
     radial-gradient(760px 340px at 12% -40%, color-mix(in srgb, #fff 55%, transparent), transparent 70%),
-    linear-gradient(180deg, var(--banner-light) 0%, color-mix(in srgb, var(--banner-light) 55%, #fff) 100%);
+    linear-gradient(180deg, var(--banner-light) 0%, color-mix(in srgb, var(--banner-light) 55%, #fff) 100%) !important;
 }
 /* 浅蓝底上用常规描边收边 */
 [data-theme='light'] .site-header.has-banner,
@@ -960,11 +962,17 @@ code, kbd, pre { font-family: var(--font-mono); }
   border-bottom: 1px solid var(--banner-light-line);
 }
 /* 文字与图标：高对比深色（在浅蓝上清晰可读） */
+[data-theme='light'] .site-header .brand-text strong,
 [data-theme='light'] .site-header.has-banner .brand-text strong,
+[data-theme-hint='light'] .site-header .brand-text strong,
 [data-theme-hint='light'] .site-header.has-banner .brand-text strong { color: #0f172a; }
+[data-theme='light'] .site-header .brand-text small,
 [data-theme='light'] .site-header.has-banner .brand-text small,
+[data-theme-hint='light'] .site-header .brand-text small,
 [data-theme-hint='light'] .site-header.has-banner .brand-text small { color: #475569; }
+[data-theme='light'] .site-header .nav-link,
 [data-theme='light'] .site-header.has-banner .nav-link,
+[data-theme-hint='light'] .site-header .nav-link,
 [data-theme-hint='light'] .site-header.has-banner .nav-link { color: #1e293b; }
 [data-theme='light'] .site-header.has-banner .nav-link:hover,
 [data-theme='light'] .site-header.has-banner .nav-link.is-active,
@@ -973,7 +981,9 @@ code, kbd, pre { font-family: var(--font-mono); }
   background: color-mix(in srgb, #fff 62%, transparent);
   color: #0f172a;
 }
+[data-theme='light'] .site-header .icon-btn,
 [data-theme='light'] .site-header.has-banner .icon-btn,
+[data-theme-hint='light'] .site-header .icon-btn,
 [data-theme-hint='light'] .site-header.has-banner .icon-btn { color: #334155; }
 [data-theme='light'] .site-header.has-banner .icon-btn:hover,
 [data-theme-hint='light'] .site-header.has-banner .icon-btn:hover {
@@ -985,10 +995,12 @@ code, kbd, pre { font-family: var(--font-mono); }
 
 /* --- 2. 内页横幅：明亮浅蓝 + 白卡片 --- */
 [data-theme='light'] .page-banner,
-[data-theme-hint='light'] .page-banner {
+[data-theme='light'] .page-banner.has-banner,
+[data-theme-hint='light'] .page-banner,
+[data-theme-hint='light'] .page-banner.has-banner {
   background:
     radial-gradient(900px 360px at 8% -30%, color-mix(in srgb, #fff 50%, transparent), transparent 72%),
-    linear-gradient(165deg, var(--banner-light) 0%, color-mix(in srgb, var(--banner-light) 45%, #fff) 100%);
+    linear-gradient(165deg, var(--banner-light) 0%, color-mix(in srgb, var(--banner-light) 45%, #fff) 100%) !important;
   border-bottom: 1px solid var(--banner-light-line);
 }
 [data-theme='light'] .page-banner-scrim,
@@ -999,22 +1011,32 @@ code, kbd, pre { font-family: var(--font-mono); }
 [data-theme='light'] .page-banner.has-banner .page-banner-inner,
 [data-theme-hint='light'] .page-banner.has-banner .page-banner-inner { padding-bottom: 34px; }
 /* 卡片实心白 + 浅蓝描边 */
-[data-theme='light'] .page-banner-card,
-[data-theme-hint='light'] .page-banner-card {
+[data-theme='light'] .page-banner.has-banner .page-banner-card,
+[data-theme='light'] .page-banner .page-banner-card,
+[data-theme-hint='light'] .page-banner.has-banner .page-banner-card,
+[data-theme-hint='light'] .page-banner .page-banner-card {
   background: #fff;
   border: 1px solid var(--banner-light-line);
   box-shadow: 0 2px 12px color-mix(in srgb, #0f172a 8%, transparent);
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
-[data-theme='light'] .page-banner-title,
-[data-theme-hint='light'] .page-banner-title { color: #0f172a; }
-[data-theme='light'] .page-banner-title .icon,
-[data-theme-hint='light'] .page-banner-title .icon { color: var(--accent-text); }
-[data-theme='light'] .page-banner-desc,
-[data-theme-hint='light'] .page-banner-desc { color: #475569; }
-[data-theme='light'] .page-banner-desc strong,
-[data-theme-hint='light'] .page-banner-desc strong { color: var(--accent-text); }
+[data-theme='light'] .page-banner.has-banner .page-banner-title,
+[data-theme='light'] .page-banner .page-banner-title,
+[data-theme-hint='light'] .page-banner.has-banner .page-banner-title,
+[data-theme-hint='light'] .page-banner .page-banner-title { color: #0f172a; }
+[data-theme='light'] .page-banner.has-banner .page-banner-title .icon,
+[data-theme='light'] .page-banner .page-banner-title .icon,
+[data-theme-hint='light'] .page-banner.has-banner .page-banner-title .icon,
+[data-theme-hint='light'] .page-banner .page-banner-title .icon { color: var(--accent-text); }
+[data-theme='light'] .page-banner.has-banner .page-banner-desc,
+[data-theme='light'] .page-banner .page-banner-desc,
+[data-theme-hint='light'] .page-banner.has-banner .page-banner-desc,
+[data-theme-hint='light'] .page-banner .page-banner-desc { color: #475569; }
+[data-theme='light'] .page-banner.has-banner .page-banner-desc strong,
+[data-theme='light'] .page-banner .page-banner-desc strong,
+[data-theme-hint='light'] .page-banner.has-banner .page-banner-desc strong,
+[data-theme-hint='light'] .page-banner .page-banner-desc strong { color: var(--accent-text); }
 
 
 
@@ -1706,11 +1728,13 @@ figure.highlight:hover > .code-copy { opacity: 1; }
 .rail-title .icon { color: var(--accent); }
 
 /* ---------- 个人名片 ---------- */
+/* 尺寸可经配置覆盖：--avatar-size / --icon-size（由 profile.ejs 内联输出） */
 .profile-card { text-align: center; padding-top: 18px; }
+.profile-card .rail-head { text-align: left; }
 .profile-avatar-wrap {
   position: relative;
-  width: 96px;
-  height: 96px;
+  width: var(--avatar-size, 96px);
+  height: var(--avatar-size, 96px);
   margin: 0 auto 12px;
 }
 .profile-avatar {
@@ -1721,11 +1745,33 @@ figure.highlight:hover > .code-copy { opacity: 1; }
   border: 2px solid var(--bg-elev);
   box-shadow: 0 0 0 3px var(--accent-soft), var(--shadow-sm);
 }
+/* 头像角标（如「博主」「V」等） */
+.profile-badge {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.6;
+  color: #fff;
+  background: var(--accent);
+  border: 2px solid var(--bg-elev);
+  box-shadow: var(--shadow-sm);
+}
 .profile-name { margin: 0 0 6px; font-size: 15.5px; font-weight: 700; }
 .profile-bio {
   margin: 0;
   font-size: 12.5px;
   line-height: 1.65;
+  color: var(--text-mute);
+}
+.profile-social-title {
+  margin: 14px 0 0;
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: .04em;
   color: var(--text-mute);
 }
 .profile-social {
@@ -1735,11 +1781,12 @@ figure.highlight:hover > .code-copy { opacity: 1; }
   gap: 8px;
   margin-top: 14px;
 }
+.profile-social-title + .profile-social { margin-top: 8px; }
 .social-btn {
   display: grid;
   place-items: center;
-  width: 34px;
-  height: 34px;
+  width: calc(var(--icon-size, 19px) + 15px);
+  height: calc(var(--icon-size, 19px) + 15px);
   border-radius: 10px;
   background: var(--bg-sunken);
   border: 1px solid var(--border-soft);

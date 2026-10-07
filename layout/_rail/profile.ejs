@@ -2,23 +2,53 @@
   var cfg = theme.profile || {};
   if (!cfg.enable) return;
   var social = Array.isArray(cfg.social) ? cfg.social : [];
+  // 以下几项都可留空：留空即不渲染该部分
+  var cardTitle = cfg.title || '';          // 卡片顶部标题，留空则不显示
+  var socialTitle = cfg.social_title || ''; // 社交区小标题，留空则不显示
+  var showBio = cfg.bio !== false && cfg.bio !== null;
+  var bioText = typeof cfg.bio === 'string' ? cfg.bio : config.description;
+  // 尺寸支持写成数字（px）或带单位的字符串，如 72 / '72px' / '5rem'
+  function toSize(v, fallback) {
+    if (v === undefined || v === null || v === '') return fallback;
+    if (typeof v === 'number') return v + 'px';
+    return String(v);
+  }
+  var avatarSize = toSize(cfg.avatar_size, '64px');
+  var iconSize = Number(cfg.icon_size) || 19;
 %>
 <section class="rail-card profile-card">
-  <div class="profile-avatar-wrap">
+  <% if (cardTitle) { %>
+    <div class="rail-head">
+      <h3 class="rail-title"><%- echo_icon(cfg.title_icon || 'user', 15) %> <%= cardTitle %></h3>
+    </div>
+  <% } %>
+
+  <div class="profile-avatar-wrap" style="--avatar-size:<%= avatarSize %>">
     <img class="profile-avatar" src="<%- echo_asset(cfg.avatar) %>"
          alt="<%= cfg.name || config.author %>" loading="lazy"
+         style="--avatar-size:<%= avatarSize %>"
          onerror="this.onerror=null;this.src='<%- url_for('/images/avatar.svg') %>'">
+    <% if (cfg.badge) { %>
+      <span class="profile-badge" title="<%= cfg.badge_title || cfg.badge %>"><%= cfg.badge %></span>
+    <% } %>
   </div>
+
   <h3 class="profile-name"><%= cfg.name || config.author %></h3>
-  <p class="profile-bio"><%= cfg.bio || config.description %></p>
+  <% if (showBio && bioText) { %>
+    <p class="profile-bio"><%= bioText %></p>
+  <% } %>
 
   <% if (social.length) { %>
+    <% if (socialTitle) { %>
+      <p class="profile-social-title"><%= socialTitle %></p>
+    <% } %>
     <div class="profile-social">
       <% social.forEach(function (item) { %>
         <a class="social-btn" href="<%- url_for(item.url) %>"
+           style="--icon-size:<%= iconSize %>px"
            title="<%= item.title || item.name %>" aria-label="<%= item.title || item.name %>"
            <% if (!/^mailto:/.test(item.url)) { %>target="_blank" rel="noopener"<% } %>>
-          <%- echo_icon(item.name, 19) %>
+          <%- echo_icon(item.name, iconSize) %>
         </a>
       <% }); %>
     </div>
