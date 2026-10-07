@@ -21,11 +21,41 @@ function normalize(value) {
   return String(value).trim();
 }
 
+// 把 front-matter 的排序字段（order / category_order）解析成数字；
+// 缺失、空、非数字一律视为「不参与自定义排序」（返回 null）。
+function parseOrder(value) {
+  if (value === undefined || value === null || value === '') return null;
+  const n = Number(value);
+  return isNaN(n) ? null : n;
+}
+
+// 通用排序：带自定义排序值的资源优先（数值越小越靠前），其余按时间倒序。
+// 全局用 order；各类型页用 category_order，缺失时回退到 order，再回退时间。
+function sortByKey(posts, getKey) {
+  return posts.slice().sort(function (a, b) {
+    const ka = parseOrder(getKey(a));
+    const kb = parseOrder(getKey(b));
+    const da = a.date ? a.date.unix() : 0;
+    const db = b.date ? b.date.unix() : 0;
+    if (ka !== null && kb !== null) return ka - kb;
+    if (ka !== null) return -1;
+    if (kb !== null) return 1;
+    return db - da;
+  });
+}
+
+function resourceKey(post) {
+  // 各类型页：优先 category_order，其次 order
+  if (post.category_order !== undefined && post.category_order !== null) return post.category_order;
+  if (post.order !== undefined && post.order !== null) return post.order;
+  return null;
+}
+
 function resourceList(locals) {
-  return locals.posts
-    .filter(post => isResource(post))
-    .sort('-date')
-    .toArray();
+  return sortByKey(
+    locals.posts.filter(post => isResource(post)).toArray(),
+    post => post.order
+  );
 }
 
 hexo.extend.generator.register('resources', function (locals) {
@@ -73,7 +103,10 @@ hexo.extend.generator.register('resources', function (locals) {
 
   // ---- 分类资源 ----
   types.forEach(type => {
-    const typed = posts.filter(post => (normalize(post.resource.type) || 'other') === type.key);
+    const typed = sortByKey(
+      posts.filter(post => (normalize(post.resource.type) || 'other') === type.key),
+      post => resourceKey(post)
+    );
     const data = {
       resourceIndex: true,
       resourceType: type,

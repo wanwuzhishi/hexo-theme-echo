@@ -3,10 +3,8 @@
   var banner = hcfg.banner;
   var overlay = (hcfg.overlay === undefined) ? 0.72 : Number(hcfg.overlay);
   var menu = theme.menu || {};
-  var primary = theme.menu_primary || [];
   var current = page.path || '';
   var keys = Object.keys(menu);
-  var more = keys.filter(function (n) { return primary.indexOf(n) === -1; });
   // 首页顶部大图时，导航悬浮在大图上，白字透明底
   var heroOn = is_home() && theme.hero && theme.hero.enable !== false;
 %>
@@ -35,30 +33,11 @@
     <nav class="site-nav" id="site-nav" aria-label="主导航">
       <ul class="nav-list">
         <% keys.forEach(function (name) { %>
-          <% if (primary.indexOf(name) > -1) { %>
-            <li>
-              <a href="<%- url_for(menu[name]) %>"
-                 class="nav-link <%= echo_is_active(current, menu[name]) ? 'is-active' : '' %>"><% var ni = echo_nav_icon(name); %><% if (ni) { %><%- echo_icon(ni, 16) %><% } %><%= name %></a>
-            </li>
-          <% } %>
-        <% }); %>
-        <% if (more.length) { %>
-          <li class="nav-more">
-            <button type="button" class="nav-link nav-more-toggle" aria-expanded="false" aria-haspopup="true">
-              <% var mi = echo_nav_icon('更多'); %><% if (mi) { %><%- echo_icon(mi, 16) %><% } %>更多 <%- echo_icon('chevron-down', 15) %>
-            </button>
-            <ul class="nav-dropdown">
-              <% more.forEach(function (name) { %>
-                <li>
-                  <a href="<%- url_for(menu[name]) %>"
-                     class="nav-link <%= echo_is_active(current, menu[name]) ? 'is-active' : '' %>">
-                    <% var di = echo_nav_icon(name); %><% if (di) { %><%- echo_icon(di, 16) %><% } %><%= name %>
-                  </a>
-                </li>
-              <% }); %>
-            </ul>
+          <li>
+            <a href="<%- url_for(menu[name]) %>"
+               class="nav-link <%= echo_is_active(current, menu[name]) ? 'is-active' : '' %>"><% var ni = echo_nav_icon(name); %><% if (ni) { %><%- echo_icon(ni, 16) %><% } %><%= name %></a>
           </li>
-        <% } %>
+        <% }); %>
       </ul>
     </nav>
 

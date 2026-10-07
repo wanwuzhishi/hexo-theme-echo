@@ -63,12 +63,6 @@ menu:
   归档: /archives/
   关于: /about/
 
-menu_primary:
-  - 首页
-  - 文章
-  - 资源库
-  - 归档
-
 # --- 首页 ---
 index:
   banner: true
@@ -201,6 +195,25 @@ post:
   prev_next: true
   # 正文前的简介（取自 description 或摘要）
   intro: true
+
+# --- 评论系统 ---
+# 内置 giscus（基于 GitHub Discussions），数据存于你指定的公开仓库。
+# 前置条件：该仓库需为 public、已安装 giscus app、且开启 Discussions。
+comments:
+  enable: true
+  provider: giscus
+  giscus:
+    repo: wanwuzhishi/wanwuzhishi.github.io
+    repo_id: R_kgDOU7KTsQ
+    category: Announcements
+    category_id: DIC_kwDOU7KTsc4DHQT_
+    mapping: url          # 用页面 URL 关联 discussion
+    strict: 0
+    reactions_enabled: 1  # 主帖反应（👍🎉…）
+    emit_metadata: 0
+    input_position: top   # 评论框在评论上方
+    theme: preferred_color_scheme  # 跟随系统；手动切主题时自动同步
+    lang: zh-CN
 
 # --- 页脚 ---
 footer:

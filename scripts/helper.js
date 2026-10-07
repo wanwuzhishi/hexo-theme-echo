@@ -32,6 +32,7 @@ const ICONS = {
   'trending-up': '<path d="m3 17 6-6 4 4 8-8"/><path d="M21 7v6h-6"/>',
   timer: '<circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/>',
   activity: '<path d="M3 12h4l2-6 3 12 2-6h7"/>',
+  comment: '<path d="M21 12a8 8 0 0 1-11.6 7.1L4 21l1.2-5A8 8 0 1 1 21 12z"/>',
   user: '<circle cx="12" cy="8" r="3.6"/><path d="M5.5 20a6.5 6.5 0 0 1 13 0"/>',
   link: '<path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 1 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 1 0 5.66 5.66l1-1"/>',
   rss: '<path d="M5 19h.01"/><path d="M4 11a9 9 0 0 1 9 9M4 4a16 16 0 0 1 16 16"/>',

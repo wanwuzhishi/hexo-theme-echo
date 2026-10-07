@@ -24,6 +24,8 @@
       try { localStorage.setItem('echo-theme', next); } catch (e) {}
       var meta = document.querySelector('meta[name="theme-color"]');
       if (meta) meta.setAttribute('content', next === 'dark' ? '#0f1117' : '#f6f7fb');
+      // 通知评论区（giscus）等跟随切换
+      window.dispatchEvent(new CustomEvent('echo:themechange', { detail: { theme: next } }));
     });
   }
 
@@ -43,22 +45,6 @@
       menuToggle.setAttribute('aria-expanded', 'false');
     });
   }
-
-  /* ---------- Nav "more" dropdown ---------- */
-  $$('.nav-more').forEach(function (item) {
-    var toggle = $('.nav-more-toggle', item);
-    if (!toggle) return;
-    toggle.addEventListener('click', function (e) {
-      e.stopPropagation();
-      var open = item.classList.toggle('is-open');
-      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-    });
-    document.addEventListener('click', function (e) {
-      if (item.contains(e.target)) return;
-      item.classList.remove('is-open');
-      toggle.setAttribute('aria-expanded', 'false');
-    });
-  });
 
   /* ---------- 回到顶部 + 首页导航吸顶切换 ---------- */
   var backTop = $('#back-to-top');

@@ -1,0 +1,49 @@
+<%
+  var c = theme.comments;
+  if (!c || !c.enable || c.provider !== 'giscus' || !c.giscus) return;
+  var g = c.giscus;
+  var themeAttr = g.theme || 'preferred_color_scheme';
+%>
+<section class="post-comments" id="comments">
+  <h2 class="comments-title"><%- echo_icon('comment', 18) %> 评论</h2>
+  <div class="giscus"></div>
+  <script src="https://giscus.app/client.js"
+          data-repo="<%- g.repo %>"
+          data-repo-id="<%- g.repo_id %>"
+          data-category="<%- g.category %>"
+          data-category-id="<%- g.category_id %>"
+          data-mapping="<%- g.mapping || 'url' %>"
+          data-strict="<%- g.strict != null ? g.strict : 0 %>"
+          data-reactions-enabled="<%- g.reactions_enabled != null ? g.reactions_enabled : 1 %>"
+          data-emit-metadata="<%- g.emit_metadata != null ? g.emit_metadata : 0 %>"
+          data-input-position="<%- g.input_position || 'top' %>"
+          data-theme="<%- themeAttr %>"
+          data-lang="<%- g.lang || 'zh-CN' %>"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <script>
+    (function () {
+      function giscusTheme() {
+        return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+      }
+      function send(theme) {
+        var frame = document.querySelector('iframe.giscus-frame');
+        if (!frame) return;
+        frame.contentWindow.postMessage({ giscus: { setConfig: { theme: theme } } }, 'https://giscus.app');
+      }
+      // giscus iframe 懒加载，出现后再同步一次当前主题
+      var obs = new MutationObserver(function () {
+        if (document.querySelector('iframe.giscus-frame')) {
+          send(giscusTheme());
+          obs.disconnect();
+        }
+      });
+      obs.observe(document.body, { childList: true, subtree: true });
+      // 用户手动切换深浅色时同步（echo.js 会在切换后派发该事件）
+      window.addEventListener('echo:themechange', function (e) {
+        send((e.detail && e.detail.theme) || giscusTheme());
+      });
+    })();
+  </script>
+</section>
