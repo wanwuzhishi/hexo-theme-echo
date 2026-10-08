@@ -35,7 +35,16 @@
   --ease: cubic-bezier(.4, 0, .2, 1);
 }
 
-[data-theme='dark'] {
+/* 深色调色板。
+   两个选择器都要写，原因见 layout.ejs 顶部的说明：
+     - data-theme        = JS 解析后的最终值（要等 head 里的脚本跑完）
+     - data-theme-hint   = 服务端直出的配置值，JS 跑之前就在 html 上
+   color_scheme 设为 dark 时，若只有第一个选择器，首屏会先按 :root 的浅色变量
+   画出来，再被 JS 刷成深色，出现闪白帧。所以深色侧也补上 hint。
+   :not([data-theme='light']) 是保护：访客手动切到浅色后 data-theme='light'，
+   此时要回落到 :root 的浅色变量，不能被 hint 的深色压住。 */
+[data-theme='dark'],
+[data-theme-hint='dark']:not([data-theme='light']) {
   --bg: #0f1117;
   --bg-elev: #171a23;
   --bg-sunken: #12141c;

@@ -161,7 +161,8 @@ resource:
 完整注释见 [`_config.yml`](_config.yml)。常用项：
 
 ```yaml
-color_scheme: auto        # auto / dark / light
+color_scheme: auto        # 默认配色：auto 跟随系统 / dark / light
+                          # 是「默认」不是「锁定」，访客仍可手动切换并记住
 radius: 14px              # 卡片圆角
 
 # 配色：只填想改的项，其余由 accent 自动派生
@@ -196,6 +197,20 @@ toc:
 个人名片、社交图标、网盘配色等全部可配，详见 [`_config.yml`](_config.yml)（每项都带中文注释）。
 
 > 提示：侧栏宽度以 `rail.left.width` / `rail.right.width` 为准（全局 `rail_width` 只作默认值）。
+
+### 改配置不要直接动主题文件
+
+把要改的项写进**站点** `_config.yml` 的 `theme_config` 下，深合并、只写差异部分：
+
+```yaml
+# 站点 _config.yml
+theme_config:
+  color_scheme: dark   # 默认深色（访客仍可用右上角开关切回浅色，并记住）
+  hero:
+    image: /images/my-hero.jpg
+```
+
+这样更新主题时不会冲突，个人偏好也不会混进主题仓库。
 
 ## 内容排序
 
