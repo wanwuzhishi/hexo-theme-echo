@@ -1,0 +1,44 @@
+<%
+  // 资源详情页「作品信息」区：左侧海报 + 右侧资源字段。
+  //
+  // 为什么海报要单独一个字段：资源卡的封面（post.cover）是 16:9 横版，
+  // 详情页的海报多是 2:3 竖版，两者共用一个字段会被迫在框里留白。
+  // 所以优先读 resource.poster（竖版素材），没写才回退到 post.cover
+  // 并按图片原始比例显示——回退时不知道比例，就不裁也不拉。
+  //
+  // 宽度与比例可在主题配置的 resource 区块调（poster_enable / poster_width / poster_ratio），
+  // 写成内联 CSS 变量而不是写进 echo.css，是为了让这个区块的调参只影响资源详情页。
+  var resCfg = theme.resource || {};
+  var r = post.resource || {};
+  var posterW = parseFloat(resCfg.poster_width) || 220;
+  var posterRatio = String(resCfg.poster_ratio || '2 / 3').trim();
+  var posterOn = resCfg.poster_enable !== false && posterW > 0;
+  var posterUrl = r.poster ? echo_asset(r.poster) : '';
+  var posterImg = posterUrl || echo_cover(post);
+  var showPoster = posterOn && !!posterImg;
+  // 显式指定了 poster 才按比例框住；回退 cover 时按原图比例自适应
+  var posterFixed = !!posterUrl;
+  var infoFields = echo_resource_fields(['updated']).filter(function (f) { return r[f.key]; });
+  var showFields = infoFields.length > 0;
+  var split = showPoster && showFields;
+%>
+<% if (showPoster || showFields) { %>
+  <section class="resource-info<%= split ? ' is-split' : '' %>"
+           style="--poster-w: <%= posterW %>px; --poster-ratio: <%= posterRatio %>">
+    <% if (showPoster) { %>
+      <figure class="resource-info-poster<%= posterFixed ? ' is-fixed' : '' %>">
+        <img src="<%- posterImg %>" alt="<%= post.title %>">
+      </figure>
+    <% } %>
+    <% if (showFields) { %>
+      <div class="resource-summary">
+        <% infoFields.forEach(function (f) { %>
+          <div class="summary-item">
+            <span class="summary-label"><%= f.label %></span>
+            <span class="summary-value"><%= f.key === 'updated' ? echo_date(r[f.key]) : r[f.key] %></span>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+  </section>
+<% } %>

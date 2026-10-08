@@ -131,6 +131,7 @@ resource:
   size: 4.2 GB
   language: 简体中文
   updated: 2026-01-01
+  poster: /images/covers/xxx.png   # 详情页左侧竖版海报，可选
   password: ''           # 提取码，可选
   links:
     - name: 百度网盘
@@ -143,6 +144,9 @@ resource:
 - `type` 写错或留空会落到 `other`
 - `links` 第一个链接变成卡片上的主按钮，其余折叠成「全部 N 个链接」
 - 卡片上显示哪些字段，由主题配置 `resource.show_fields` 控制
+- 详情页是「左侧海报 + 右侧字段表」双栏。没写 `poster` 会回退用 `cover`
+  （按原图比例显示）；两者都没写就只显示字段表。海报宽度与比例见
+  主题配置 `resource.poster_enable` / `poster_width` / `poster_ratio`
 
 ---
 
@@ -229,7 +233,7 @@ themes/echo/
 │   ├── tag.ejs            标签
 │   ├── article-index.ejs  文章轨列表
 │   ├── resource-index.ejs 资源轨列表
-│   ├── _partial/          头部、导航、页脚、卡片、分页、搜索、上下篇、评论区
+│   ├── _partial/          头部、导航、页脚、卡片、分页、搜索、上下篇、作品信息、评论区
 │   └── _rail/             侧栏组件：名片/音乐/统计/分类/标签/日历/站点信息/目录
 ├── scripts/
 │   ├── helper.js          21 个 echo_* helper + 51 个内置 SVG 图标

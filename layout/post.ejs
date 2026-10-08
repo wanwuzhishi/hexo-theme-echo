@@ -62,16 +62,7 @@
       <% } %>
 
       <% if (isResource) { %>
-        <section class="resource-summary">
-          <% echo_resource_fields(['updated']).forEach(function (f) { %>
-            <% if (res[f.key]) { %>
-              <div class="summary-item">
-                <span class="summary-label"><%= f.label %></span>
-                <span class="summary-value"><%= f.key === 'updated' ? echo_date(res[f.key]) : res[f.key] %></span>
-              </div>
-            <% } %>
-          <% }); %>
-        </section>
+        <%- partial('_partial/resource-info', { post: post }) %>
       <% } %>
 
       <%- partial('_partial/toc-inline', { post: post }) %>
