@@ -132,6 +132,10 @@ resource:
   language: 简体中文
   updated: 2026-01-01
   poster: /images/covers/xxx.png   # 详情页左侧竖版海报，可选
+  info:                  # 详情页「作品信息表」，渲染在海报右侧
+    中文名: 某某游戏
+    年份: 2026
+    制作: 某某工作室
   password: ''           # 提取码，可选
   links:
     - name: 百度网盘
@@ -144,9 +148,11 @@ resource:
 - `type` 写错或留空会落到 `other`
 - `links` 第一个链接变成卡片上的主按钮，其余折叠成「全部 N 个链接」
 - 卡片上显示哪些字段，由主题配置 `resource.show_fields` 控制
-- 详情页是「左侧海报 + 右侧字段表」双栏。没写 `poster` 会回退用 `cover`
-  （按原图比例显示）；两者都没写就只显示字段表。海报宽度与比例见
-  主题配置 `resource.poster_enable` / `poster_width` / `poster_ratio`
+- 详情页是「左侧海报 + 右侧（字段摘要条 + 作品信息表）」双栏。没写 `poster`
+  会回退用 `cover`（按原图比例显示）；两者都没写就只显示右栏内容。
+  海报宽度与比例见主题配置 `resource.poster_enable` / `poster_width` / `poster_ratio`
+- 作品信息写在 `resource.info`（键即行名，值支持字符串或数组），
+  **不要写在正文里**——正文表格进不了双栏，用 JS 搬运会有布局闪帧
 
 ---
 

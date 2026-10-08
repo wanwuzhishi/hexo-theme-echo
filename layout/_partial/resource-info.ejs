@@ -1,10 +1,16 @@
 <%
-  // 资源详情页「作品信息」区：左侧海报 + 右侧资源字段。
+  // 资源详情页「作品信息」区：左侧海报 + 右侧（字段摘要条 + 作品信息表）。
   //
   // 为什么海报要单独一个字段：资源卡的封面（post.cover）是 16:9 横版，
   // 详情页的海报多是 2:3 竖版，两者共用一个字段会被迫在框里留白。
   // 所以优先读 resource.poster（竖版素材），没写才回退到 post.cover
   // 并按图片原始比例显示——回退时不知道比例，就不裁也不拉。
+  //
+  // 为什么作品信息表走 resource.info 而不是写在正文里：表格要渲染进海报
+  // 右侧的双栏里，正文 Markdown 无法被模板「搬」进去（用 JS 搬会有布局
+  // 闪帧），所以信息行直接写在 front-matter，服务端直出、零闪帧。
+  // 支持两种写法：映射式（键即行名，按书写顺序输出）或
+  // 数组式 [{ label, value }]（需要重复行名或想分组管理时用）。
   //
   // 宽度与比例可在主题配置的 resource 区块调（poster_enable / poster_width / poster_ratio），
   // 写成内联 CSS 变量而不是写进 echo.css，是为了让这个区块的调参只影响资源详情页。
@@ -15,30 +21,65 @@
   var posterOn = resCfg.poster_enable !== false && posterW > 0;
   var posterUrl = r.poster ? echo_asset(r.poster) : '';
   var posterImg = posterUrl || echo_cover(post);
-  var showPoster = posterOn && !!posterImg;
   // 显式指定了 poster 才按比例框住；回退 cover 时按原图比例自适应
   var posterFixed = !!posterUrl;
   var infoFields = echo_resource_fields(['updated']).filter(function (f) { return r[f.key]; });
   var showFields = infoFields.length > 0;
-  var split = showPoster && showFields;
+
+  // resource.info：作品信息表的行。映射式 { 中文名: xxx } 或数组式 [{ label, value }]
+  var infoRows = [];
+  if (r.info && typeof r.info === 'object') {
+    if (Array.isArray(r.info)) {
+      r.info.forEach(function (it) {
+        if (it && it.label != null && String(it.label).trim()) {
+          infoRows.push({ label: String(it.label).trim(), value: it.value });
+        }
+      });
+    } else {
+      Object.keys(r.info).forEach(function (k) {
+        var v = r.info[k];
+        if (v == null || v === '') return;
+        infoRows.push({ label: k, value: Array.isArray(v) ? v.join(' / ') : v });
+      });
+    }
+  }
+  var showInfo = infoRows.length > 0;
+  var split = posterOn && !!posterImg && (showFields || showInfo);
 %>
-<% if (showPoster || showFields) { %>
+<% if (split || showFields || showInfo) { %>
   <section class="resource-info<%= split ? ' is-split' : '' %>"
            style="--poster-w: <%= posterW %>px; --poster-ratio: <%= posterRatio %>">
-    <% if (showPoster) { %>
+    <% if (split) { %>
       <figure class="resource-info-poster<%= posterFixed ? ' is-fixed' : '' %>">
         <img src="<%- posterImg %>" alt="<%= post.title %>">
       </figure>
     <% } %>
-    <% if (showFields) { %>
-      <div class="resource-summary">
-        <% infoFields.forEach(function (f) { %>
-          <div class="summary-item">
-            <span class="summary-label"><%= f.label %></span>
-            <span class="summary-value"><%= f.key === 'updated' ? echo_date(r[f.key]) : r[f.key] %></span>
-          </div>
-        <% }); %>
-      </div>
-    <% } %>
+    <div class="resource-info-main">
+      <% if (showFields) { %>
+        <div class="resource-summary">
+          <% infoFields.forEach(function (f) { %>
+            <div class="summary-item">
+              <span class="summary-label"><%= f.label %></span>
+              <span class="summary-value"><%= f.key === 'updated' ? echo_date(r[f.key]) : r[f.key] %></span>
+            </div>
+          <% }); %>
+        </div>
+      <% } %>
+      <% if (showInfo) { %>
+        <table class="resource-info-table">
+          <thead>
+            <tr><th>项目</th><th>内容</th></tr>
+          </thead>
+          <tbody>
+            <% infoRows.forEach(function (row) { %>
+              <tr>
+                <td><%= row.label %></td>
+                <td><%= row.value %></td>
+              </tr>
+            <% }); %>
+          </tbody>
+        </table>
+      <% } %>
+    </div>
   </section>
 <% } %>
