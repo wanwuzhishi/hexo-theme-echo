@@ -25,7 +25,7 @@
 <% } %>
 <% var ogCover = page.cover || (page.photos && page.photos.length ? page.photos[0] : ''); %>
 <% if (ogCover) { %>
-<meta property="og:image" content="<%- echo_asset(ogCover) %>">
+<meta property="og:image" content="<%- full_url_for(ogCover) %>">
 <% } %>
 
 <% if (is_post()) { %>
@@ -36,6 +36,46 @@
 <% } %>
 
 <link rel="canonical" href="<%- full_url_for(page.path || '/') %>">
+
+<% if (is_post()) { %>
+<%
+  // 文章页的 BlogPosting 结构化数据：字段全部取自 front-matter 与站点配置，
+  // 作者/发布者、封面、标签、分类都是搜索引擎理解文章实体需要的信号。
+  // cover 缺失时省略 image，不输出空字符串。
+  function ldNames(list) {
+    if (!list) return [];
+    var arr = list.toArray ? list.toArray() : list;
+    return arr.map(function (item) { return item.name; }).filter(Boolean);
+  }
+  var ldUrl = full_url_for(page.path || '/');
+  var ldCover = ogCover ? full_url_for(ogCover) : '';
+  var ld = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    'headline': page.title,
+    'description': page.description || config.description,
+    'url': ldUrl,
+    'mainEntityOfPage': { '@type': 'WebPage', '@id': ldUrl },
+    'datePublished': page.date.toISOString(),
+    'dateModified': (page.updated || page.date).toISOString(),
+    'author': { '@type': 'Person', 'name': config.author || config.title },
+    'publisher': {
+      '@type': 'Organization',
+      'name': config.title,
+      'logo': { '@type': 'ImageObject', 'url': full_url_for(config.favicon || '/favicon.png') }
+    },
+    'inLanguage': config.language || 'zh-CN',
+    'isPartOf': { '@type': 'Blog', 'name': config.title, 'url': full_url_for('/') }
+  };
+  if (ldCover) ld.image = [ldCover];
+  var ldTags = ldNames(page.tags);
+  if (ldTags.length) ld.keywords = ldTags.join(', ');
+  var ldCategories = ldNames(page.categories);
+  if (ldCategories.length) ld.articleSection = ldCategories.join(', ');
+%>
+<script type="application/ld+json"><%- JSON.stringify(ld).replace(/</g, '\\u003c') %></script>
+<% } %>
+
 <link rel="alternate" type="application/atom+xml" href="<%- url_for('/atom.xml') %>" title="<%= config.title %>">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
