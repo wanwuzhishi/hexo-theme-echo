@@ -23,6 +23,7 @@
   <%- partial('_partial/search') %>
 
   <script>window.ECHO_ROOT = '<%- url_for('/') %>';</script>
-  <script src="<%- url_for('/js/echo.js') %>" defer></script>
+  <% var jsVer = echo_asset_version('js/echo.js'); %>
+  <script src="<%- url_for('/js/echo.js') %><%= jsVer ? '?v=' + jsVer : '' %>" defer></script>
 </body>
 </html>

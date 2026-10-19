@@ -41,6 +41,8 @@ Echo 不是通用博客主题，它是为「资源站 + 博客」混合形态设
 - 51 个自绘 SVG 图标（24 网格，stroke 1.7），无图标字体、无 CDN 图标依赖
 - 首页 Hero 大图、页脚备案、内置 giscus 评论
 - 文章页输出 `BlogPosting` + `BreadcrumbList` JSON-LD，首页输出 `WebSite`；完整 OG / Twitter 卡片、canonical 与富媒体预览指令
+- 不依赖 Google Fonts，正文使用系统字体栈
+- CSS/JS/头像/站点图标自动带内容哈希，更新后自动破缓存
 
 ---
 

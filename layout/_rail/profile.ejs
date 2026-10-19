@@ -15,6 +15,7 @@
   }
   var avatarSize = toSize(cfg.avatar_size, '64px');
   var iconSize = Number(cfg.icon_size) || 19;
+  var avatarVer = echo_asset_version(cfg.avatar);
 %>
 <section class="rail-card profile-card">
   <% if (cardTitle) { %>
@@ -24,7 +25,7 @@
   <% } %>
 
   <div class="profile-avatar-wrap" style="--avatar-size:<%= avatarSize %>">
-    <img class="profile-avatar" src="<%- echo_asset(cfg.avatar) %>"
+    <img class="profile-avatar" src="<%- echo_asset(cfg.avatar) %><%= avatarVer ? '?v=' + avatarVer : '' %>"
          alt="<%= cfg.name || config.author %>" loading="lazy"
          style="--avatar-size:<%= avatarSize %>"
          onerror="this.onerror=null;this.src='<%- url_for('/images/avatar.svg') %>'">

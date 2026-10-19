@@ -164,11 +164,8 @@
 
 <link rel="alternate" type="application/atom+xml" href="<%- url_for('/atom.xml') %>" title="<%= config.title %>">
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap">
-
-<link rel="stylesheet" href="<%- url_for('/css/echo.css') %>">
+<% var cssVer = echo_asset_version('css/echo.css'); %>
+<link rel="stylesheet" href="<%- url_for('/css/echo.css') %><%= cssVer ? '?v=' + cssVer : '' %>">
 <%
   var railCfg = theme.rail || {};
   var railLeftW = (railCfg.left && railCfg.left.width) || theme.rail_width || '240px';
@@ -217,9 +214,10 @@
   var faviconExt = (faviconPath.split('?')[0].split('.').pop() || '').toLowerCase();
   var faviconType = faviconExt === 'svg' ? 'image/svg+xml'
     : (faviconExt === 'jpg' || faviconExt === 'jpeg') ? 'image/jpeg' : 'image/png';
+  var faviconVer = echo_asset_version(faviconPath);
 %>
-<link rel="icon" href="<%- echo_asset(faviconPath) %>" type="<%= faviconType %>">
-<link rel="apple-touch-icon" href="<%- echo_asset(faviconPath) %>">
+<link rel="icon" href="<%- echo_asset(faviconPath) %><%= faviconVer ? '?v=' + faviconVer : '' %>" type="<%= faviconType %>">
+<link rel="apple-touch-icon" href="<%- echo_asset(faviconPath) %><%= faviconVer ? '?v=' + faviconVer : '' %>">
 
 <script>
   (function () {

@@ -4,6 +4,10 @@
 
 'use strict';
 
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+
 const ICONS = {
   /* 通用界面 */
   home: '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
@@ -290,6 +294,22 @@ function resolveAsset(url) {
   return (root.endsWith('/') ? root : root + '/') + normalized;
 }
 
+function assetVersion(file) {
+  if (!file) return '';
+  const rel = String(file).replace(/^\/+/, '').split('?')[0];
+  const roots = [];
+  if (hexo.theme_dir) roots.push(path.join(hexo.theme_dir, 'source'));
+  if (hexo.source_dir) roots.push(hexo.source_dir);
+  for (const root of roots) {
+    try {
+      return crypto.createHash('md5').update(fs.readFileSync(path.join(root, rel))).digest('hex').slice(0, 8);
+    } catch (e) {
+      // 文件不在这个目录，继续尝试下一个
+    }
+  }
+  return '';
+}
+
 function navActive(current, target) {
   if (!target) return false;
   const root = hexo.config.root || '/';
@@ -360,6 +380,7 @@ hexo.extend.helper.register('echo_resource_types', resourceTypes);
 hexo.extend.helper.register('echo_resource_type', resourceTypeOf);
 hexo.extend.helper.register('echo_pan_color', panColor);
 hexo.extend.helper.register('echo_asset', resolveAsset);
+hexo.extend.helper.register('echo_asset_version', assetVersion);
 hexo.extend.helper.register('echo_color_vars', themeColorVars);
 hexo.extend.helper.register('echo_is_active', navActive);
 
