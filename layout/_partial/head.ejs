@@ -2,30 +2,78 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="<%= echo_color_vars().accent %>">
 
-<title><% if (is_home() && !page.title) { %><%= config.title %> · <%= config.subtitle %><% } else { %><%= page.title ? page.title + ' · ' + config.title : config.title %><% } %></title>
+<%
+  var archiveTitle = '';
+  if (is_archive()) {
+    archiveTitle = '归档';
+    if (page.year) archiveTitle += '：' + page.year + ' 年';
+    if (page.month) archiveTitle += ' ' + page.month + ' 月';
+  }
+  var pageSuffix = Number(page.current) > 1 ? '第 ' + page.current + ' 页。' : '';
 
-<% if (page.description) { %>
-<meta name="description" content="<%= page.description %>">
-<% } else if (config.description) { %>
-<meta name="description" content="<%= config.description %>">
-<% } %>
+  var seoTitle = page.title;
+  if (is_archive()) seoTitle = archiveTitle;
+  if (!seoTitle && is_category() && page.category) seoTitle = '分类：' + page.category;
+  if (!seoTitle && is_tag() && page.tag) seoTitle = '标签：' + page.tag;
+  if (is_home() && !seoTitle) {
+    seoTitle = config.title + (config.subtitle ? ' · ' + config.subtitle : '');
+  } else if (seoTitle) {
+    seoTitle = seoTitle + ' · ' + config.title;
+  } else {
+    seoTitle = config.title;
+  }
+  if (Number(page.current) > 1) {
+    seoTitle = seoTitle + ' · 第 ' + page.current + ' 页';
+  }
+
+  var seoDescription = page.description;
+  if (!seoDescription) {
+    if (is_category() && page.category) {
+      seoDescription = '「' + page.category + '」分类下的全部文章。' + pageSuffix + config.description;
+    } else if (is_tag() && page.tag) {
+      seoDescription = '「' + page.tag + '」标签下的全部文章。' + pageSuffix + config.description;
+    } else if (is_archive()) {
+      seoDescription = archiveTitle + '。' + pageSuffix + config.description;
+    } else if (is_home() && Number(page.current) > 1) {
+      seoDescription = '万物之时博客第 ' + page.current + ' 页。' + config.description;
+    } else if (page.title) {
+      seoDescription = page.title + (Number(page.current) > 1 ? ' · 第 ' + page.current + ' 页' : '') + ' · ' + config.description;
+    } else {
+      seoDescription = config.description;
+    }
+  }
+
+  var ogTitle = page.title;
+  if (is_archive()) ogTitle = archiveTitle;
+  if (!ogTitle && is_category() && page.category) ogTitle = '分类：' + page.category;
+  if (!ogTitle && is_tag() && page.tag) ogTitle = '标签：' + page.tag;
+  if (!ogTitle) ogTitle = config.title;
+  var ogCover = page.cover || (page.photos && page.photos.length ? page.photos[0] : '');
+  var ogCoverExt = ogCover ? String(ogCover).split('?')[0].split('.').pop().toLowerCase() : '';
+  var ogCoverRaster = ['png', 'jpg', 'jpeg', 'webp', 'gif'].indexOf(ogCoverExt) !== -1;
+  var postCats = is_post() && page.categories ? page.categories.toArray() : [];
+  var postTags = is_post() && page.tags ? page.tags.toArray() : [];
+%>
+<title><%= seoTitle %></title>
+
+<meta name="description" content="<%= seoDescription %>">
 <% if (config.keywords) { %>
 <meta name="keywords" content="<%= Array.isArray(config.keywords) ? config.keywords.join(',') : config.keywords %>">
 <% } %>
 <% if (config.author) { %>
 <meta name="author" content="<%= config.author %>">
 <% } %>
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
 
 <meta property="og:type" content="<%= is_post() ? 'article' : 'website' %>">
-<meta property="og:title" content="<%= page.title ? page.title : config.title %>">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="<%= ogTitle %>">
 <meta property="og:url" content="<%- full_url_for(page.path || '/') %>">
 <meta property="og:site_name" content="<%= config.title %>">
-<% if (page.description || config.description) { %>
-<meta property="og:description" content="<%= page.description || config.description %>">
-<% } %>
-<% var ogCover = page.cover || (page.photos && page.photos.length ? page.photos[0] : ''); %>
+<meta property="og:description" content="<%= seoDescription %>">
 <% if (ogCover) { %>
 <meta property="og:image" content="<%- full_url_for(ogCover) %>">
+<meta property="og:image:alt" content="<%= ogTitle %>">
 <% } %>
 
 <% if (is_post()) { %>
@@ -33,27 +81,33 @@
 <% if (page.updated) { %>
 <meta property="article:modified_time" content="<%- page.updated.toISOString() %>">
 <% } %>
+<% if (postCats.length) { %>
+<meta property="article:section" content="<%= postCats[0].name %>">
+<% } %>
+<% postTags.forEach(function (tag) { %>
+<meta property="article:tag" content="<%= tag.name %>">
+<% }); %>
+<% } %>
+
+<meta name="twitter:card" content="<%= ogCoverRaster ? 'summary_large_image' : 'summary' %>">
+<meta name="twitter:title" content="<%= ogTitle %>">
+<meta name="twitter:description" content="<%= seoDescription %>">
+<% if (ogCover && ogCoverRaster) { %>
+<meta name="twitter:image" content="<%- full_url_for(ogCover) %>">
+<meta name="twitter:image:alt" content="<%= ogTitle %>">
 <% } %>
 
 <link rel="canonical" href="<%- full_url_for(page.path || '/') %>">
 
 <% if (is_post()) { %>
 <%
-  // 文章页的 BlogPosting 结构化数据：字段全部取自 front-matter 与站点配置，
-  // 作者/发布者、封面、标签、分类都是搜索引擎理解文章实体需要的信号。
-  // cover 缺失时省略 image，不输出空字符串。
-  function ldNames(list) {
-    if (!list) return [];
-    var arr = list.toArray ? list.toArray() : list;
-    return arr.map(function (item) { return item.name; }).filter(Boolean);
-  }
   var ldUrl = full_url_for(page.path || '/');
   var ldCover = ogCover ? full_url_for(ogCover) : '';
   var ld = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
     'headline': page.title,
-    'description': page.description || config.description,
+    'description': seoDescription,
     'url': ldUrl,
     'mainEntityOfPage': { '@type': 'WebPage', '@id': ldUrl },
     'datePublished': page.date.toISOString(),
@@ -68,12 +122,44 @@
     'isPartOf': { '@type': 'Blog', 'name': config.title, 'url': full_url_for('/') }
   };
   if (ldCover) ld.image = [ldCover];
-  var ldTags = ldNames(page.tags);
+  var ldTags = postTags.map(function (t) { return t.name; }).filter(Boolean);
   if (ldTags.length) ld.keywords = ldTags.join(', ');
-  var ldCategories = ldNames(page.categories);
+  var ldCategories = postCats.map(function (c) { return c.name; }).filter(Boolean);
   if (ldCategories.length) ld.articleSection = ldCategories.join(', ');
+
+  var crumbItems = [{ name: '首页', url: full_url_for('/') }];
+  if (postCats.length) crumbItems.push({ name: postCats[0].name, url: full_url_for(postCats[0].path) });
+  crumbItems.push({ name: page.title, url: ldUrl });
+  var breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    'itemListElement': crumbItems.map(function (item, index) {
+      return { '@type': 'ListItem', 'position': index + 1, 'name': item.name, 'item': item.url };
+    })
+  };
 %>
 <script type="application/ld+json"><%- JSON.stringify(ld).replace(/</g, '\\u003c') %></script>
+<script type="application/ld+json"><%- JSON.stringify(breadcrumbLd).replace(/</g, '\\u003c') %></script>
+<% } %>
+
+<% if (is_home() && !(Number(page.current) > 1)) { %>
+<%
+  var websiteLd = {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    'name': config.title,
+    'alternateName': config.subtitle || undefined,
+    'url': full_url_for('/'),
+    'description': seoDescription,
+    'inLanguage': config.language || 'zh-CN',
+    'publisher': {
+      '@type': 'Organization',
+      'name': config.title,
+      'logo': { '@type': 'ImageObject', 'url': full_url_for(config.favicon || '/favicon.png') }
+    }
+  };
+%>
+<script type="application/ld+json"><%- JSON.stringify(websiteLd).replace(/</g, '\\u003c') %></script>
 <% } %>
 
 <link rel="alternate" type="application/atom+xml" href="<%- url_for('/atom.xml') %>" title="<%= config.title %>">

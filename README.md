@@ -40,7 +40,7 @@ Echo 不是通用博客主题，它是为「资源站 + 博客」混合形态设
 - 站内搜索：`/search.json` 索引，无第三方服务
 - 51 个自绘 SVG 图标（24 网格，stroke 1.7），无图标字体、无 CDN 图标依赖
 - 首页 Hero 大图、页脚备案、内置 giscus 评论
-- 文章页自动输出 `BlogPosting` JSON-LD（标题、描述、日期、作者、封面、标签/分类），`og:image` 使用绝对 URL
+- 文章页输出 `BlogPosting` + `BreadcrumbList` JSON-LD，首页输出 `WebSite`；完整 OG / Twitter 卡片、canonical 与富媒体预览指令
 
 ---
 
