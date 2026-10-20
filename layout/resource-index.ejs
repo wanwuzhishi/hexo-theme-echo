@@ -13,6 +13,7 @@
     }
   });
   var hcfg = theme.header || {};
+  var visibleTypes = types.filter(function (t) { return (counts[t.key] || 0) > 0; });
 %>
 <div class="page-banner <%= hcfg.banner ? 'has-banner' : '' %>"
      <% if (hcfg.banner) { %>style="background-image:url('<%- echo_asset(hcfg.banner) %>')"<% } %>>
@@ -37,7 +38,7 @@
       <a class="filter-chip <%= !active ? 'is-active' : '' %>" href="<%- url_for('/' + base + '/') %>">
         全部<span class="filter-count"><%= totalAll %></span>
       </a>
-      <% types.forEach(function (type) { %>
+      <% visibleTypes.forEach(function (type) { %>
         <a class="filter-chip <%= active && active.key === type.key ? 'is-active' : '' %>"
            href="<%- url_for('/' + base + '/' + type.key + '/') %>">
           <%- echo_icon(type.icon, 14) %> <%= type.name %><span class="filter-count"><%= counts[type.key] || 0 %></span>

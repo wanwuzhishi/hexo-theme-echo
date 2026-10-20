@@ -9,10 +9,10 @@
   var tocHtml = toc(post.content, { depth: depth + 1, class: 'toc', list_number: false });
   if (!tocHtml || !tocHtml.trim()) return;
 %>
-<details class="toc-inline" open>
+<details class="toc-inline">
   <summary class="toc-inline-head">
     <span class="toc-inline-title"><%- echo_icon('list', 15) %> <%= tocCfg.title || '目录' %></span>
-    <span class="toc-inline-hint">点击展开 / 收起</span>
+    <span class="toc-inline-hint">展开 / 收起</span>
   </summary>
   <nav class="toc-body toc-inline-body" aria-label="文章目录">
     <%- tocHtml %>

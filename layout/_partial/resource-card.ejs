@@ -27,14 +27,6 @@
 
     <p class="resource-excerpt"><%- echo_truncate(post.excerpt || post.content, 90) %></p>
 
-    <div class="resource-fields">
-      <% echo_resource_fields(['updated']).forEach(function (f) { %>
-        <% if (res[f.key]) { %>
-          <span class="field-chip"><em><%= f.label %></em><%= res[f.key] %></span>
-        <% } %>
-      <% }); %>
-    </div>
-
     <div class="resource-actions">
       <% if (links.length) { %>
         <% var first = links[0]; %>

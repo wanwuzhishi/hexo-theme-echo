@@ -13,6 +13,7 @@
   });
   var base = (config.resources && config.resources.path) || 'resources';
   var heroOn = !(theme.hero && theme.hero.enable === false);
+  var visibleTypes = types.filter(function (t) { return (counts[t.key] || 0) > 0; });
 %>
 
 <% if (heroOn) { %><%- partial('_partial/hero') %><% } %>
@@ -36,14 +37,14 @@
     </section>
     <% } %>
 
-    <% if (entries && types.length) { %>
+    <% if (entries && visibleTypes.length) { %>
       <section class="home-section">
         <div class="section-head">
           <h2 class="section-title"><%- echo_icon('layers', 18) %> 资源分类</h2>
           <a class="section-more" href="<%- url_for('/' + base + '/') %>">全部 <%- echo_icon('chevron', 13) %></a>
         </div>
         <div class="entry-grid">
-          <% types.forEach(function (type) { %>
+          <% visibleTypes.forEach(function (type) { %>
             <a class="entry-card" href="<%- url_for('/' + base + '/' + type.key + '/') %>">
               <span class="entry-icon"><%- echo_icon(type.icon, 20) %></span>
               <span class="entry-text">
