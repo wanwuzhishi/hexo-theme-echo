@@ -430,7 +430,8 @@ function parseOrderNum(value) {
 // 同轨道相邻文章（上一篇 / 下一篇）：文章与资源库互不串。
 //   - 资源帖（resource.enable: true）只在「资源轨道」内相邻；
 //   - 普通文章只在「文章轨道」内相邻。
-// 排序与列表一致：先按 front-matter 的 order（数值越小越靠前），未设置的按时间倒序。
+// 设置了 series 的文章，只在同一系列内相邻；系列内优先 series_order，
+// 未设置时回退 order，再回退时间倒序。未设置 series 时保持原排序。
 hexo.extend.helper.register('echo_adjacent_posts', function (post) {
   if (!post || !post.path) return { prev: null, next: null };
   const isRes = !!(post.resource && post.resource.enable);
@@ -438,9 +439,22 @@ hexo.extend.helper.register('echo_adjacent_posts', function (post) {
   const track = list.filter(function (p) {
     return !!(p.resource && p.resource.enable) === isRes;
   });
-  const sorted = track.slice().sort(function (a, b) {
-    const ka = parseOrderNum(a.order);
-    const kb = parseOrderNum(b.order);
+  const series = (post.series === undefined || post.series === null || post.series === '')
+    ? null
+    : String(post.series);
+  const scoped = series
+    ? track.filter(function (p) { return String(p.series || '') === series; })
+    : track;
+  const orderOf = function (p) {
+    if (series) {
+      const seriesOrder = parseOrderNum(p.series_order);
+      if (seriesOrder !== null) return seriesOrder;
+    }
+    return parseOrderNum(p.order);
+  };
+  const sorted = scoped.slice().sort(function (a, b) {
+    const ka = orderOf(a);
+    const kb = orderOf(b);
     const da = a.date ? a.date.unix() : 0;
     const db = b.date ? b.date.unix() : 0;
     if (ka !== null && kb !== null) return ka - kb;
