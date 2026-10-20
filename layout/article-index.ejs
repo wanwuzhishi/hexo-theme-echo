@@ -36,7 +36,7 @@
       </a>
       <% artCats.forEach(function (cat) { %>
         <a class="filter-chip" href="<%- url_for(cat.path) %>">
-          <%- echo_icon('folder', 14) %> <%= cat.name %><span class="filter-count"><%= cat.count %></span>
+          <%- echo_icon('file-text', 14) %> <%= cat.name %><span class="filter-count"><%= cat.count %></span>
         </a>
       <% }); %>
     </nav>

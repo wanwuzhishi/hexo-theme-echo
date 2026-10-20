@@ -7,6 +7,9 @@
   var tags = echo_tags(post, compact ? 2 : 3);
   var isResource = post.resource && post.resource.enable;
   var type = isResource ? echo_resource_type(post) : null;
+  // 资源卡展示资源类型；普通文章卡展示首个分类，分类图标统一使用文章图标
+  var badgeIcon = isResource ? type.icon : 'file-text';
+  var badgeName = isResource ? type.name : (cats.length ? cats[0].name : '文章');
 %>
 <article class="post-card <%= compact ? 'is-compact' : '' %> <%= isResource ? 'is-resource' : '' %>">
   <a class="card-cover" href="<%- url_for(post.path) %>" aria-hidden="true" tabindex="-1">
@@ -14,12 +17,10 @@
       <img src="<%- cover %>" alt="<%= post.title %>" loading="lazy">
     <% } else { %>
       <span class="cover-fallback" data-title="<%= post.title %>">
-        <%- echo_icon(isResource ? type.icon : 'layers', 34) %>
+        <%- echo_icon(badgeIcon, 34) %>
       </span>
     <% } %>
-    <% if (isResource) { %>
-      <span class="card-badge"><%- echo_icon(type.icon, 14) %> <%= type.name %></span>
-    <% } %>
+    <span class="card-badge"><%- echo_icon(badgeIcon, 14) %> <%= badgeName %></span>
   </a>
 
   <div class="card-body">

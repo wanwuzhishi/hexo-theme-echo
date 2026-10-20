@@ -13,7 +13,7 @@
   <span class="page-banner-scrim" style="opacity:<%= (hcfg.overlay === undefined) ? 0.72 : Number(hcfg.overlay) %>"></span>
   <div class="page-banner-inner">
     <div class="page-banner-card">
-      <h1 class="page-banner-title"><%- echo_icon('folder', 24) %> <%= page.category ? '分类：' + page.category : '全部分类' %></h1>
+      <h1 class="page-banner-title"><%- echo_icon(isArticleCat ? 'file-text' : 'folder', 24) %> <%= page.category ? '分类：' + page.category : '全部分类' %></h1>
       <p class="page-banner-desc">共 <strong><%= page.posts ? page.posts.length : 0 %></strong> 篇内容</p>
     </div>
   </div>
@@ -31,7 +31,7 @@
         <% artCats.forEach(function (cat) { %>
           <a class="filter-chip <%= cat.name === page.category ? 'is-active' : '' %>"
              href="<%- url_for(cat.path) %>">
-            <%- echo_icon('folder', 14) %> <%= cat.name %><span class="filter-count"><%= cat.count %></span>
+            <%- echo_icon('file-text', 14) %> <%= cat.name %><span class="filter-count"><%= cat.count %></span>
           </a>
         <% }); %>
       </nav>
