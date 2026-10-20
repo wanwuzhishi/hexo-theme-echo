@@ -15,13 +15,24 @@
     </div>
   </div>
 
+  <%
+    var footerCfg = theme.footer || {};
+    var currentYear = date(new Date(), 'YYYY');
+    var sinceYear = footerCfg.since ? String(footerCfg.since) : '';
+    // 起始年份与当前年份相同时只显示当前年，避免出现「© 2026 - 2026」
+    var yearText = sinceYear && sinceYear !== currentYear
+      ? sinceYear + ' - ' + currentYear
+      : currentYear;
+    var themeName = footerCfg.theme_name || 'Echo 主题';
+    var themeUrl = footerCfg.theme_url || 'https://github.com/wanwuzhishi/hexo-theme-echo';
+  %>
   <div class="footer-bottom">
-    <span>© <%= theme.footer && theme.footer.since ? theme.footer.since + ' - ' : '' %><%= date(new Date(), 'YYYY') %> <%= config.author || config.title %></span>
-    <% if (theme.footer && theme.footer.beian && theme.footer.beian.enable && theme.footer.beian.text) { %>
-      <a href="<%= theme.footer.beian.link || '#' %>" target="_blank" rel="noopener"><%= theme.footer.beian.text %></a>
+    <span>© <%= yearText %> <%= config.author || config.title %></span>
+    <% if (footerCfg.beian && footerCfg.beian.enable && footerCfg.beian.text) { %>
+      <a href="<%= footerCfg.beian.link || '#' %>" target="_blank" rel="noopener"><%= footerCfg.beian.text %></a>
     <% } %>
-    <% if (theme.footer && theme.footer.powered) { %>
-      <span>由 <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 与 <a href="https://github.com/" target="_blank" rel="noopener">Echo 主题</a> 驱动</span>
+    <% if (footerCfg.powered) { %>
+      <span>由 <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 与 <a href="<%= themeUrl %>" target="_blank" rel="noopener"><%= themeName %></a>驱动</span>
     <% } %>
   </div>
 </footer>

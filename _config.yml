@@ -480,10 +480,14 @@ comments:
 # ============================================================================
 
 footer:
-  # 起始年份。填了会显示成「2024 - 2026」，留空则只显示当前年
+  # 起始年份。填了会显示成「2024 - 2026」；起始年份与当前年份相同时只显示当前年。
+  # 留空则只显示当前年。
   since: 2024
   # 是否显示「由 Hexo 驱动」之类的 Powered by 信息
   powered: true
+  # Powered by 信息里的主题名与仓库地址
+  theme_name: Echo 主题
+  theme_url: https://github.com/wanwuzhishi/hexo-theme-echo
   # 备案信息。enable 为 true 且 text 非空时才显示
   beian:
     enable: false
