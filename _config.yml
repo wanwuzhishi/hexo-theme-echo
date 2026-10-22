@@ -317,6 +317,17 @@ stats:
   # 建站日期，用于计算运行时长
   since: 2024-01-01
 
+# ---------- 浏览量（Busuanzi）----------
+# 启用后从 Busuanzi CDN 加载统计脚本，并在首页/文章页右栏统计卡片、页脚显示 PV。
+# 这是第三方统计服务；不需要时设为 false。
+busuanzi:
+  enable: false
+  # 官方 JSONP 脚本；如使用自建/镜像地址，改这里即可
+  script_url: https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js
+  # 统计卡片中的文案
+  site_label: 全站访问
+  page_label: 本文阅读
+
 # ---------- 文章目录 ----------
 toc:
   enable: true

@@ -25,6 +25,8 @@
       : currentYear;
     var themeName = footerCfg.theme_name || 'Echo 主题';
     var themeUrl = footerCfg.theme_url || 'https://github.com/wanwuzhishi/hexo-theme-echo';
+    var bzCfg = theme.busuanzi || {};
+    var busuanziEnabled = bzCfg.enable === true;
   %>
   <div class="footer-bottom">
     <span>© <%= yearText %> <%= config.author || config.title %></span>
@@ -34,9 +36,49 @@
     <% if (footerCfg.powered) { %>
       <span>由 <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a> 与 <a href="<%= themeUrl %>" target="_blank" rel="noopener"><%= themeName %></a> 驱动</span>
     <% } %>
+    <% if (busuanziEnabled) { %>
+      <span class="footer-views"><%= bzCfg.site_label || '全站访问' %> <strong id="busuanzi_value_site_pv">--</strong> 次</span>
+    <% } %>
   </div>
 </footer>
 
 <button type="button" class="back-to-top" id="back-to-top" aria-label="回到顶部" title="回到顶部">
   <%- echo_icon('chevron', 18) %>
 </button>
+
+<% if (busuanziEnabled) { %>
+<script defer src="<%- bzCfg.script_url || 'https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js' %>"></script>
+<script>
+  (function () {
+    var source = document.getElementById('busuanzi_value_site_pv');
+    if (!source) return;
+    var targets = document.querySelectorAll('[data-busuanzi-site-pv]');
+    var formatCount = function (value) {
+      var number = Number(String(value).replace(/,/g, ''));
+      return isFinite(number) ? number.toLocaleString('en-US') : value;
+    };
+    var sync = function () {
+      var value = formatCount(source.textContent);
+      if (!value || value === '--') return;
+      if (source.textContent !== value) source.textContent = value;
+      for (var i = 0; i < targets.length; i++) targets[i].textContent = value;
+    };
+    sync();
+    if (window.MutationObserver) {
+      new MutationObserver(sync).observe(source, { childList: true, characterData: true, subtree: true });
+    }
+    var page = document.getElementById('busuanzi_value_page_pv');
+    if (page) {
+      var syncPage = function () {
+        var value = formatCount(page.textContent);
+        if (!value || value === '--') return;
+        if (page.textContent !== value) page.textContent = value;
+      };
+      syncPage();
+      if (window.MutationObserver) {
+        new MutationObserver(syncPage).observe(page, { childList: true, characterData: true, subtree: true });
+      }
+    }
+  })();
+</script>
+<% } %>

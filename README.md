@@ -39,6 +39,7 @@ Echo 不是通用博客主题，它是为「资源站 + 博客」混合形态设
 - 深浅色双主题：跟随系统 + 手动切换 + 刷新不闪屏（`<head>` 内联防抖脚本）
 - 浅色主题下顶部横幅自动换成明亮的浅蓝底、深色文字，不出现割裂感
 - 站内搜索：`/search.json` 索引，无第三方服务
+- 可选 Busuanzi 浏览量：首页/文章页右栏统计卡片首行与页脚显示 PV（默认关闭）
 - 51 个自绘 SVG 图标（24 网格，stroke 1.7），无图标字体、无 CDN 图标依赖
 - 首页 Hero 大图、页脚备案、内置 giscus 评论
 - 文章页输出 `BlogPosting` + `BreadcrumbList` JSON-LD，首页输出 `WebSite`；完整 OG / Twitter 卡片、canonical 与富媒体预览指令
@@ -197,6 +198,12 @@ rail:
 toc:
   enable: true
   depth: 3
+
+busuanzi:                 # 可选：Busuanzi 浏览量
+  enable: false
+  script_url: https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js
+  site_label: 全站访问
+  page_label: 本文阅读
 ```
 
 个人名片、社交图标、网盘配色等全部可配，详见 [`_config.yml`](_config.yml)（每项都带中文注释）。

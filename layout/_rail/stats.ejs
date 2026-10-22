@@ -1,6 +1,8 @@
 <%
   var cfg = theme.stats || {};
   if (!cfg.enable) return;
+  var bzCfg = theme.busuanzi || {};
+  var busuanziEnabled = bzCfg.enable === true;
   var show = Array.isArray(cfg.show) ? cfg.show : ['posts', 'categories', 'tags', 'words', 'runtime', 'updated'];
   var runtime = echo_site_runtime(cfg.since);
   var words = echo_site_words(site.posts);
@@ -18,6 +20,21 @@
     <h3 class="rail-title"><%- echo_icon('layers', 15) %> <%= cfg.title || '统计' %></h3>
   </div>
   <ul class="stat-rows">
+    <% if (busuanziEnabled && (is_home() || is_post())) { %>
+      <li class="stat-row-views">
+        <span class="stat-label">
+          <%- echo_icon('activity', 16) %>
+          <%= is_post() ? (bzCfg.page_label || '本文阅读') : (bzCfg.site_label || '全站访问') %>
+        </span>
+        <span class="stat-value is-accent">
+          <% if (is_post()) { %>
+            <span id="busuanzi_value_page_pv">--</span>
+          <% } else { %>
+            <span data-busuanzi-site-pv>--</span>
+          <% } %><em class="stat-unit">次</em>
+        </span>
+      </li>
+    <% } %>
     <% show.forEach(function (key) { %>
       <% var row = rows[key]; if (!row) return; %>
       <li>
