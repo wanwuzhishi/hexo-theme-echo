@@ -27,19 +27,32 @@
   var showFields = infoFields.length > 0;
 
   // resource.info：作品信息表的行。映射式 { 中文名: xxx } 或数组式 [{ label, value }]
+  //
+  // 值统一过一遍 infoVal()：YAML 里不带引号的 2026-09-01 会被解析成日期，
+  // 直接输出会变成 2026-09-01T00:00:00.000Z 这种原始 ISO 串，所以在这里就格式化掉。
+  // 两种形态都要处理：有时还是 Date 对象，有时 Hexo 已把它转成 ISO 字符串。
+  var infoVal = function (v) {
+    if (v instanceof Date) return echo_date(v);
+    if (typeof v === 'string') {
+      var iso = /^(\d{4}-\d{2}-\d{2})T\d{2}:\d{2}(:\d{2})?(\.\d+)?Z?$/.exec(v.trim());
+      if (iso) return iso[1];
+    }
+    if (Array.isArray(v)) return v.map(infoVal).join(' / ');
+    return v;
+  };
   var infoRows = [];
   if (r.info && typeof r.info === 'object') {
     if (Array.isArray(r.info)) {
       r.info.forEach(function (it) {
         if (it && it.label != null && String(it.label).trim()) {
-          infoRows.push({ label: String(it.label).trim(), value: it.value });
+          infoRows.push({ label: String(it.label).trim(), value: infoVal(it.value) });
         }
       });
     } else {
       Object.keys(r.info).forEach(function (k) {
         var v = r.info[k];
         if (v == null || v === '') return;
-        infoRows.push({ label: k, value: Array.isArray(v) ? v.join(' / ') : v });
+        infoRows.push({ label: k, value: infoVal(v) });
       });
     }
   }
