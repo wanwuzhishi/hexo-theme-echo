@@ -3,7 +3,7 @@
  *
  * hexo-generator-sitemap 只收录文章、独立页面、分类和标签，
  * 归档（含年月分页）、文章列表、资源库以及它们的分页页都不会进 sitemap。
- * 这里在所有页面写盘之后，按本次实际生成的路由把缺的列表页补进 sitemap.xml。
+ * 这里在所有页面写盘之后，按本次实际生成的路由把缺的列表页补进站点地图。
  *
  * 关闭方式：主题配置 `sitemap.extra: false`。
  */
@@ -48,14 +48,16 @@ function encodeUrl(url) {
     .join('/');
 }
 
-// 放在 before_exit：after_generate 阶段路由还在往磁盘写，sitemap.xml 可能尚未落盘。
+// 放在 before_exit：after_generate 阶段路由还在往磁盘写，sitemap 可能尚未落盘。
 hexo.extend.filter.register('before_exit', function () {
   const cfg = (hexo.theme.config && hexo.theme.config.sitemap) || {};
   if (cfg.extra === false) return;
 
-  const sitemapFile = path.join(hexo.public_dir, 'sitemap.xml');
+  // 站点可以用 sitemap.path 把地图放到子目录，这里跟着站点配置走。
+  const sitemapPath = (hexo.config.sitemap && hexo.config.sitemap.path) || 'sitemap.xml';
+  const sitemapFile = path.join(hexo.public_dir, sitemapPath);
   if (!fs.existsSync(sitemapFile)) {
-    hexo.log.warn('sitemap: 没有找到 sitemap.xml，跳过列表页补全');
+    hexo.log.warn('sitemap: 没有找到 ' + sitemapPath + '，跳过列表页补全');
     return;
   }
 

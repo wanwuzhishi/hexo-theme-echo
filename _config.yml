@@ -511,8 +511,9 @@ footer:
 # ============================================================================
 
 sitemap:
-  # 是否把列表页补进 sitemap.xml。
+  # 是否把列表页补进站点地图。
   # hexo-generator-sitemap 默认只收录文章、独立页面、分类和标签；
   # 打开后会把归档（含年月与分页）、文章列表、资源库及其分页也补进去。
-  # 依赖站点安装 hexo-generator-sitemap 并生成 sitemap.xml，没有该文件时自动跳过。
+  # 文件名和位置跟随站点 _config.yml 的 sitemap.path，可以放到子目录（如 sitemap/sitemap.xml）。
+  # 依赖站点安装 hexo-generator-sitemap 并生成站点地图，没有该文件时自动跳过。
   extra: true
